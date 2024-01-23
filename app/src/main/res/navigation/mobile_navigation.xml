@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_forecast">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.linglingdr00.weathernotification.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_forecast"
+        android:name="com.linglingdr00.weathernotification.ui.forecast.ForecastFragment"
+        android:label="@string/title_forecast"
+        tools:layout="@layout/fragment_forecast" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.linglingdr00.weathernotification.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_location"
+        android:name="com.linglingdr00.weathernotification.ui.location.LocationFragment"
+        android:label="@string/title_location"
+        tools:layout="@layout/fragment_location" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.linglingdr00.weathernotification.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_now"
+        android:name="com.linglingdr00.weathernotification.ui.now.NowFragment"
+        android:label="@string/title_now"
+        tools:layout="@layout/fragment_now" />
 </navigation>

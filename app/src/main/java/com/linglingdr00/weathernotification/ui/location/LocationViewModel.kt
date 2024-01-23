@@ -1,13 +1,13 @@
-package com.linglingdr00.weathernotification.ui.notifications
+package com.linglingdr00.weathernotification.ui.location
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class NotificationsViewModel : ViewModel() {
+class LocationViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
+        value = "目前位置"
     }
     val text: LiveData<String> = _text
 }

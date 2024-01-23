@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Weather Notification</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_forecast">天氣預報</string>
+    <string name="title_location">目前位置</string>
+    <string name="title_now">現在天氣</string>
 </resources>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="forecastItem"
+            type="com.linglingdr00.weathernotification.model.ForecastItem" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="6dp"
+        android:elevation="2dp"
+        style="?attr/materialCardViewElevatedStyle">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_bg"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/locationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@{forecastItem.locationText}"
+                tools:text="新北市" />
+
+            <TextView
+                android:id="@+id/timeText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/locationText"
+                android:layout_marginTop="10dp"
+                android:text="@{forecastItem.timeText1}"
+                tools:text="今天 12:00 - 今天 18:00"/>
+
+            <ImageView
+                android:id="@+id/weatherImg1"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/timeText1"
+                android:padding="5dp"
+                android:layout_marginTop="2dp"
+                app:imageId="@{forecastItem.weatherImg1}"
+                tools:src="@drawable/storm"/>
+
+            <TextView
+                android:id="@+id/weatherText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/weatherImg1"
+                app:layout_constraintTop_toBottomOf="@id/timeText1"
+                app:layout_constraintTop_toTopOf="@+id/weatherImg1"
+                android:textColor="@color/black"
+                android:text="@{forecastItem.weatherText1}"
+                tools:text="陰短暫雨"/>
+
+            <TextView
+                android:id="@+id/popText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/weatherImg1"
+                app:layout_constraintTop_toBottomOf="@id/weatherText1"
+                app:layout_constraintBottom_toBottomOf="@+id/weatherImg1"
+                android:textSize="12sp"
+                app:popText="@{forecastItem.popText1}"
+                tools:text="降雨機率: 60%" />
+
+            <TextView
+                android:id="@+id/temperature1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/weatherText1"
+                app:layout_constraintBottom_toBottomOf="@+id/popText1"
+                android:textColor="@color/black"
+                android:text="@{forecastItem.temperature1}"
+                tools:text="19°C - 24°C"/>
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weatherImg1"
+                android:layout_marginTop="5dp"
+                android:background="#1A000000" />
+
+            <TextView
+                android:id="@+id/timeText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line1"
+                android:layout_marginTop="10dp"
+                android:text="@{forecastItem.timeText2}"
+                tools:text="今天 18:00 - 明天 06:00"/>
+
+            <ImageView
+                android:id="@+id/weatherImg2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/timeText2"
+                android:padding="5dp"
+                android:layout_marginTop="2dp"
+                app:imageId="@{forecastItem.weatherImg2}"
+                tools:src="@drawable/storm" />
+
+            <TextView
+                android:id="@+id/weatherText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/weatherImg2"
+                app:layout_constraintTop_toBottomOf="@id/timeText2"
+                app:layout_constraintTop_toTopOf="@+id/weatherImg2"
+                android:textColor="@color/black"
+                android:text="@{forecastItem.weatherText2}"
+                tools:text="陰短暫雨"/>
+
+            <TextView
+                android:id="@+id/popText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/weatherImg2"
+                app:layout_constraintTop_toBottomOf="@id/weatherText2"
+                app:layout_constraintBottom_toBottomOf="@+id/weatherImg2"
+                android:textSize="12sp"
+                app:popText="@{forecastItem.popText2}"
+                tools:text="降雨機率: 60%" />
+
+            <TextView
+                android:id="@+id/temperature2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/weatherText2"
+                app:layout_constraintBottom_toBottomOf="@+id/popText2"
+                android:textColor="@color/black"
+                android:text="@{forecastItem.temperature2}"
+                tools:text="19°C - 24°C"/>
+
+            <View
+                android:id="@+id/line2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weatherImg2"
+                android:layout_marginTop="5dp"
+                android:background="#1A000000" />
+
+            <TextView
+                android:id="@+id/timeText3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line2"
+                android:layout_marginTop="10dp"
+                android:text="@{forecastItem.timeText3}"
+                tools:text="明天 06:00 - 明天 18:00"/>
+
+            <ImageView
+                android:id="@+id/weatherImg3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/timeText3"
+                android:padding="5dp"
+                android:layout_marginTop="2dp"
+                app:imageId="@{forecastItem.weatherImg3}"
+                tools:src="@drawable/storm" />
+
+            <TextView
+                android:id="@+id/weatherText3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/weatherImg3"
+                app:layout_constraintTop_toBottomOf="@id/timeText3"
+                app:layout_constraintTop_toTopOf="@+id/weatherImg3"
+                android:textColor="@color/black"
+                android:text="@{forecastItem.weatherText3}"
+                tools:text="陰短暫雨"/>
+
+            <TextView
+                android:id="@+id/popText3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/weatherImg3"
+                app:layout_constraintTop_toBottomOf="@id/weatherText3"
+                app:layout_constraintBottom_toBottomOf="@+id/weatherImg3"
+                android:textSize="12sp"
+                app:popText="@{forecastItem.popText3}"
+                tools:text="降雨機率: 60%" />
+
+            <TextView
+                android:id="@+id/temperature3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/weatherText3"
+                app:layout_constraintBottom_toBottomOf="@+id/popText3"
+                android:textColor="@color/black"
+                android:text="@{forecastItem.temperature3}"
+                tools:text="19°C - 24°C"/>
+
+            <View
+                android:id="@+id/line3"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weatherImg3"
+                android:layout_marginTop="5dp"
+                android:background="#1A000000" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+</layout>
