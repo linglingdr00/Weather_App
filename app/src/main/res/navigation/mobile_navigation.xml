@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_forecast"
-        android:name="com.linglingdr00.weathernotification.ui.forecast.ForecastFragment"
+        android:name="com.linglingdr00.weather.ui.forecast.ForecastFragment"
         android:label="@string/title_forecast"
         tools:layout="@layout/fragment_forecast" />
 
     <fragment
         android:id="@+id/navigation_location"
-        android:name="com.linglingdr00.weathernotification.ui.location.LocationFragment"
+        android:name="com.linglingdr00.weather.ui.location.LocationFragment"
         android:label="@string/title_location"
         tools:layout="@layout/fragment_location" />
 
     <fragment
         android:id="@+id/navigation_now"
-        android:name="com.linglingdr00.weathernotification.ui.now.NowFragment"
+        android:name="com.linglingdr00.weather.ui.now.NowFragment"
         android:label="@string/title_now"
         tools:layout="@layout/fragment_now" />
 </navigation>

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.linglingdr00.weathernotification"
+    namespace = "com.linglingdr00.weather"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.linglingdr00.weathernotification"
+        applicationId = "com.linglingdr00.weather"
         minSdk = 26
         targetSdk = 33
         versionCode = 1

@@ -1,4 +1,4 @@
-package com.linglingdr00.weathernotification
+package com.linglingdr00.weather
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,8 +6,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.linglingdr00.weathernotification.databinding.ActivityMainBinding
-
+import com.linglingdr00.weather.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

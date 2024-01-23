@@ -6,7 +6,7 @@
     <data>
         <variable
             name="forecastItem"
-            type="com.linglingdr00.weathernotification.model.ForecastItem" />
+            type="com.linglingdr00.weather.ui.forecast.ForecastItem" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -26,10 +26,11 @@
                 android:id="@+id/locationText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="10dp"
                 android:text="@{forecastItem.locationText}"
                 tools:text="新北市" />
 
@@ -51,7 +52,7 @@
                 app:layout_constraintTop_toBottomOf="@id/timeText1"
                 android:padding="5dp"
                 android:layout_marginTop="2dp"
-                app:imageId="@{forecastItem.weatherImg1}"
+                app:weatherImg="@{forecastItem.weatherCode1}"
                 tools:src="@drawable/storm"/>
 
             <TextView
@@ -90,10 +91,11 @@
             <View
                 android:id="@+id/line1"
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
+                android:layout_height="1dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/weatherImg1"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="10dp"
                 android:background="#1A000000" />
 
             <TextView
@@ -114,7 +116,7 @@
                 app:layout_constraintTop_toBottomOf="@id/timeText2"
                 android:padding="5dp"
                 android:layout_marginTop="2dp"
-                app:imageId="@{forecastItem.weatherImg2}"
+                app:weatherImg="@{forecastItem.weatherCode2}"
                 tools:src="@drawable/storm" />
 
             <TextView
@@ -153,10 +155,10 @@
             <View
                 android:id="@+id/line2"
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
+                android:layout_height="1dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/weatherImg2"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:background="#1A000000" />
 
             <TextView
@@ -177,7 +179,7 @@
                 app:layout_constraintTop_toBottomOf="@id/timeText3"
                 android:padding="5dp"
                 android:layout_marginTop="2dp"
-                app:imageId="@{forecastItem.weatherImg3}"
+                app:weatherImg="@{forecastItem.weatherCode3}"
                 tools:src="@drawable/storm" />
 
             <TextView
@@ -216,10 +218,10 @@
             <View
                 android:id="@+id/line3"
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
+                android:layout_height="1dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/weatherImg3"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:background="#1A000000" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

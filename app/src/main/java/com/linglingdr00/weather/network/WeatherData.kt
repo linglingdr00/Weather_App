@@ -1,4 +1,4 @@
-package com.linglingdr00.weathernotification.network
+package com.linglingdr00.weather.network
 
 data class WeatherData(
     val records: Records = Records(),
@@ -14,7 +14,7 @@ data class WeatherData(
             val weatherElement: List<WeatherElement> = listOf()
         ) {
             data class WeatherElement(
-                val elementName: String = "", //Wx(天氣現象), PoP(降雨機率), MinT, CI, MaxT
+                val elementName: String = "", //Wx(天氣現象), PoP(降雨機率), MinT, CI(舒適度), MaxT
                 val time: List<Time> = listOf()
             ) {
                 data class Time(

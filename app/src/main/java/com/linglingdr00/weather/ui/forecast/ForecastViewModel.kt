@@ -1,13 +1,11 @@
-package com.linglingdr00.weathernotification.ui.forecast
+package com.linglingdr00.weather.ui.forecast
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.linglingdr00.weathernotification.R
-import com.linglingdr00.weathernotification.model.ForecastItem
-import com.linglingdr00.weathernotification.network.WeatherApi
+import com.linglingdr00.weather.network.WeatherApi
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -34,11 +32,13 @@ class ForecastViewModel() : ViewModel() {
 
         viewModelScope.launch {
             try {
-
+                //呼叫 WeatherApi 取得所有資料
                 val allData = WeatherApi.retrofitService.getAllData(key = API_KEY)
+                //新增一個 mapArrayList 存放所需資料
                 val mapArrayList = ArrayList<MutableMap<String, String>>()
 
                 allData.records.location.forEachIndexed { index, location ->
+                    //新增一個 map 存放資料(key, value)
                     val hashMap: MutableMap<String, String> = mutableMapOf()
 
                     val locationName = location.locationName
@@ -51,20 +51,26 @@ class ForecastViewModel() : ViewModel() {
 
                         weatherElement.time.forEachIndexed { index, time ->
                             val timeIndex = index+1
-                            val startTime = dateTimeFormat(time.startTime)
-                            val endTime = dateTimeFormat(time.endTime)
+                            val startTime = datetimeFormat(time.startTime)
+                            val endTime = datetimeFormat(time.endTime)
                             val timeString = "$startTime - $endTime"
                             hashMap.put("time$timeIndex", timeString)
 
                             val parameter = time.parameter.parameterName
                             val name = elementName
                             hashMap.put("$name$timeIndex", parameter)
+
+                            if (name=="Wx") {
+                                //取得天氣代碼
+                                val weatherCode = time.parameter.parameterValue
+                                hashMap.put("weatherCode$timeIndex", weatherCode)
+                            }
                         }
                     }
                     mapArrayList.add(hashMap)
                     //Log.d("$index: ", "${mapArrayList[index]}")
                 }
-                getArrayList(mapArrayList)
+                handleData(mapArrayList)
             } catch (e: Exception) {
                 //_text.value = "Failure: ${e.message}"
                 Log.d(TAG, "Failure: ${e.message}")
@@ -72,13 +78,14 @@ class ForecastViewModel() : ViewModel() {
         }
     }
 
-    // 取得處理好的 array list，可用 key 取 value
-    private fun getArrayList(arrayList: ArrayList<MutableMap<String, String>>) {
+    // 處理 data (array list 可使用 key 取得 value)
+    private fun handleData(arrayList: ArrayList<MutableMap<String, String>>) {
 
+        // temperature format
         arrayList.forEachIndexed { index, mutableMap ->
 
             for (i in 1..3) {
-                // 處理 temperature
+                // 把 MinT(最低溫) 和 MaxT(最高溫) 結合成一個 string
                 val minT = mutableMap.get("MinT$i")
                 //Log.d(TAG, "minT: $minT")
                 val maxT = mutableMap.get("MaxT$i")
@@ -86,6 +93,7 @@ class ForecastViewModel() : ViewModel() {
                 val temperature = "$minT°C - $maxT°C"
                 //Log.d(TAG, "temperature$i: $temperature")
                 mutableMap.put("temperature$i", temperature)
+                // 移除 MinT 和 MaxT
                 mutableMap.remove("MinT$i")
                 mutableMap.remove("MaxT$i")
             }
@@ -94,23 +102,24 @@ class ForecastViewModel() : ViewModel() {
         transToForecastItem(arrayList)
     }
 
+    // 轉換成 transToForecastItem
     private fun transToForecastItem(arrayList: ArrayList<MutableMap<String, String>>) {
         val tempList = mutableListOf<ForecastItem>()
         arrayList.forEachIndexed { index, mutableMap ->
             val item = ForecastItem(
                 mutableMap.get("location").toString(),
                 mutableMap.get("time1").toString(),
-                R.drawable.storm,
+                mutableMap.get("weatherCode1").toString(),
                 mutableMap.get("Wx1").toString(),
                 mutableMap.get("PoP1").toString(),
                 mutableMap.get("temperature1").toString(),
                 mutableMap.get("time2").toString(),
-                R.drawable.storm,
+                mutableMap.get("weatherCode2").toString(),
                 mutableMap.get("Wx2").toString(),
                 mutableMap.get("PoP2").toString(),
                 mutableMap.get("temperature2").toString(),
                 mutableMap.get("time3").toString(),
-                R.drawable.storm,
+                mutableMap.get("weatherCode3").toString(),
                 mutableMap.get("Wx3").toString(),
                 mutableMap.get("PoP3").toString(),
                 mutableMap.get("temperature3").toString()
@@ -123,7 +132,7 @@ class ForecastViewModel() : ViewModel() {
         Log.d(TAG, "_forecastItem: ${_forecastItemList.value}")
     }
 
-    private fun dateTimeFormat(timeString: String): String {
+    private fun datetimeFormat(timeString: String): String {
         //將 string 轉成 LocalDateTime
         val formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val dt = LocalDateTime.parse(timeString, formatter1)

@@ -1,4 +1,4 @@
-package com.linglingdr00.weathernotification.ui.location
+package com.linglingdr00.weather.ui.location
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.linglingdr00.weathernotification.databinding.FragmentLocationBinding
+import com.linglingdr00.weather.databinding.FragmentLocationBinding
 
 class LocationFragment : Fragment() {
 

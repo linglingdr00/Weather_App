@@ -1,4 +1,4 @@
-package com.linglingdr00.weathernotification.ui.forecast
+package com.linglingdr00.weather.ui.forecast
 
 import android.graphics.Rect
 import android.view.View

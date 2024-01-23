@@ -1,4 +1,4 @@
-package com.linglingdr00.weathernotification.ui.forecast
+package com.linglingdr00.weather.ui.forecast
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.linglingdr00.weathernotification.databinding.FragmentForecastBinding
+import com.linglingdr00.weather.databinding.FragmentForecastBinding
 
 
 class ForecastFragment : Fragment() {

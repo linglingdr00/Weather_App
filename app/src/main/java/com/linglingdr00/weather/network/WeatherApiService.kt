@@ -1,4 +1,4 @@
-package com.linglingdr00.weathernotification.network
+package com.linglingdr00.weather.network
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

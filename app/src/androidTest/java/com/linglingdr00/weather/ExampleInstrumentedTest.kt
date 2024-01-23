@@ -1,4 +1,4 @@
-package com.linglingdr00.weathernotification
+package com.linglingdr00.weather
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

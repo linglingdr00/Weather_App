@@ -1,4 +1,4 @@
-package com.linglingdr00.weathernotification
+package com.linglingdr00.weather
 
 import org.junit.Test
 
