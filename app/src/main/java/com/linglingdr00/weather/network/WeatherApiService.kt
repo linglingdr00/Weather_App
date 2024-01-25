@@ -7,15 +7,13 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-
 // 新增 base URL
 private const val BASE_URL = "https://opendata.cwa.gov.tw/api/"
-// 新增 moshi object
 
+// 新增 moshi object
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
-
 
 // 新增 retrofit object
 private val retrofit = Retrofit.Builder()
@@ -25,7 +23,7 @@ private val retrofit = Retrofit.Builder()
 
 interface WeatherApiService {
     @GET("v1/rest/datastore/F-C0032-001")
-    suspend fun getAllData(
+    suspend fun getForecastData(
         @Query("Authorization") key: String,
         @Query("locationName") city: String? = null
     ): WeatherData
