@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_forecast">
+    app:startDestination="@id/navigation_location">
 
     <fragment
-        android:id="@+id/navigation_forecast"
-        android:name="com.linglingdr00.weather.ui.forecast.ForecastFragment"
-        android:label="@string/title_forecast"
-        tools:layout="@layout/fragment_forecast" />
+        android:id="@+id/navigation_now"
+        android:name="com.linglingdr00.weather.ui.now.NowFragment"
+        android:label="@string/title_now"
+        tools:layout="@layout/fragment_now" />
 
     <fragment
         android:id="@+id/navigation_location"
@@ -18,8 +18,9 @@
         tools:layout="@layout/fragment_location" />
 
     <fragment
-        android:id="@+id/navigation_now"
-        android:name="com.linglingdr00.weather.ui.now.NowFragment"
-        android:label="@string/title_now"
-        tools:layout="@layout/fragment_now" />
+        android:id="@+id/navigation_forecast"
+        android:name="com.linglingdr00.weather.ui.forecast.ForecastFragment"
+        android:label="@string/title_forecast"
+        tools:layout="@layout/fragment_forecast" />
+
 </navigation>

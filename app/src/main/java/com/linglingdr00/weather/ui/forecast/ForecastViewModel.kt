@@ -31,17 +31,19 @@ class ForecastViewModel() : ViewModel() {
     val status: LiveData<WeatherApiStatus> = _status
 
     init {
-        getWeatherData()
+        //getWeatherData()
     }
 
-    private fun getWeatherData() {
+    fun getWeatherData() {
 
         viewModelScope.launch {
             //設定 WeatherApi 狀態為 LOADING
             _status.value = WeatherApiStatus.LOADING
+            Log.d(TAG, "status: ${status.value}")
             try {
                 // 呼叫 WeatherApi 取得所有資料
                 val allData = WeatherApi.retrofitService.getForecastData(key = API_KEY)
+
                 // 新增一個 mapArrayList 存放所需資料
                 val mapArrayList = ArrayList<MutableMap<String, String>>()
 
@@ -81,8 +83,6 @@ class ForecastViewModel() : ViewModel() {
                 }
                 // 進一步處理資料
                 handleData(mapArrayList)
-                //設定 WeatherApi 狀態為 DONE
-                _status.value = WeatherApiStatus.DONE
             } catch (e: Exception) {
                 Log.d(TAG, "Failure: ${e.message}")
                 //設定 WeatherApi 狀態為 ERROR
@@ -142,6 +142,9 @@ class ForecastViewModel() : ViewModel() {
         }
         //將 dataArrayList 設為處理好的資料
         dataArrayList = arrayList
+        //設定 WeatherApi 狀態為 DONE
+        _status.value = WeatherApiStatus.DONE
+        Log.d(TAG, "status: ${_status.value}")
     }
 
     // 轉換成 transToForecastItem
@@ -174,13 +177,13 @@ class ForecastViewModel() : ViewModel() {
     }
 
     // 根據選擇的區域設定不同資料
-    fun setAreaData(areaList: MutableList<String>) {
+    fun setAreaData(cityList: MutableList<String>) {
         //新增一個空 array list
         val tempArrayList: ArrayList<MutableMap<String, String>> = arrayListOf()
         //空 array list 的 index
         var index = 0
         //跑需要加入空 list 的每個縣市
-        for (city in areaList) {
+        for (city in cityList) {
             var tempIndex = 0
             dataArrayList.forEachIndexed { index, map ->
                 //找到 location 和 city 相同的那筆資料

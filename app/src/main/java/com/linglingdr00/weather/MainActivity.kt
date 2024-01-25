@@ -1,11 +1,13 @@
 package com.linglingdr00.weather
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.linglingdr00.weather.databinding.ActivityMainBinding
+import com.linglingdr00.weather.ui.forecast.ForecastViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,5 +30,10 @@ class MainActivity : AppCompatActivity() {
         )*/
         setSupportActionBar(binding.toolbar)
         navView.setupWithNavController(navController)
+
+        //取得 ForecastViewModel
+        val forecastViewModel: ForecastViewModel by viewModels()
+        //載入天氣預報資料
+        forecastViewModel.getWeatherData()
     }
 }

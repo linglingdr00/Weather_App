@@ -85,7 +85,6 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
             // Apply the adapter to the spinner
             spinnerView.adapter = adapter
         }
-
         spinnerView.onItemSelectedListener = this@ForecastFragment
 
     }
@@ -93,16 +92,17 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
     // 當 spinner menu 選擇 item 時的動作
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         Log.d(TAG, "onItemSelected: $position, $id")
-        val cityList: MutableList<String>
-        when (position) {
-            0 -> cityList = resources.getStringArray(R.array.northern_array).toList() as MutableList<String>
-            1 -> cityList = resources.getStringArray(R.array.central_array).toList() as MutableList<String>
-            2 -> cityList = resources.getStringArray(R.array.southern_array).toList() as MutableList<String>
-            3 -> cityList = resources.getStringArray(R.array.eastern_array).toList() as MutableList<String>
-            else -> cityList = resources.getStringArray(R.array.outlying_array).toList() as MutableList<String>
+        val cityList = when (position) {
+            0 -> resources.getStringArray(R.array.northern_array).toList() as MutableList<String>
+            1 -> resources.getStringArray(R.array.central_array).toList() as MutableList<String>
+            2 -> resources.getStringArray(R.array.southern_array).toList() as MutableList<String>
+            3 -> resources.getStringArray(R.array.eastern_array).toList() as MutableList<String>
+            else -> resources.getStringArray(R.array.outlying_array).toList() as MutableList<String>
         }
         Log.d(TAG, "position: $position, cityList: $cityList")
-        viewModel.setAreaData(cityList)
+        if (viewModel.status.value == ForecastViewModel.WeatherApiStatus.DONE) {
+            viewModel.setAreaData(cityList)
+        }
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {

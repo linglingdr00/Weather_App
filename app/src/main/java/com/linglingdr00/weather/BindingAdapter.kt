@@ -1,11 +1,13 @@
 package com.linglingdr00.weather
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.linglingdr00.weather.ui.forecast.ForecastAdapter
 import com.linglingdr00.weather.ui.forecast.ForecastItem
+import com.linglingdr00.weather.ui.forecast.ForecastViewModel.WeatherApiStatus
 
 /* @BindingAdapter 註解會通知 data binding */
 
@@ -58,5 +60,29 @@ fun setWeatherImg(imgView: ImageView, weatherCode: String?) {
 fun setPopText(textView: TextView, weatherPop: String?) {
     weatherPop.let {
         textView.setText("降雨機率: $weatherPop%")
+    }
+}
+
+/* 設定 status 以顯示 loading 和 error status 的 icon */
+@BindingAdapter("weatherApiStatus")
+fun bindStatus(imageView: ImageView, status: WeatherApiStatus?) {
+    when (status) {
+        WeatherApiStatus.LOADING -> {
+            // 將 status ImageView 設為可顯示
+            imageView.visibility = View.VISIBLE
+            // 設定 loading animation
+            imageView.setImageResource(R.drawable.loading_animation)
+        }
+        WeatherApiStatus.ERROR -> {
+            // 將 state ImageView 設為可顯示
+            imageView.visibility = View.VISIBLE
+            // 設定 connection error 圖示
+            imageView.setImageResource(R.drawable.ic_connection_error)
+        }
+        WeatherApiStatus.DONE -> {
+            // 將 state ImageView 設定為不可顯示
+            imageView.visibility = View.GONE
+        }
+        else -> {}
     }
 }
