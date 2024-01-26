@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.linglingdr00.weather.network.ForecastData
 import com.linglingdr00.weather.network.WeatherApi
-import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -21,7 +23,7 @@ class ForecastViewModel() : ViewModel() {
     private val _forecastItemList = MutableLiveData<List<ForecastItem>>()
     val forecastItemList: LiveData<List<ForecastItem>> = _forecastItemList
 
-    // 儲存取得資料的 array list
+    // 儲存取得資料的 ArrayList
     private var dataArrayList: ArrayList<MutableMap<String, String>> = arrayListOf()
     // WeatherApi 狀態的 enum class
     enum class WeatherApiStatus { LOADING, ERROR, DONE }
@@ -31,66 +33,53 @@ class ForecastViewModel() : ViewModel() {
     val status: LiveData<WeatherApiStatus> = _status
 
     init {
-        //getWeatherData()
+        //getForecastData()
     }
 
-    fun getWeatherData() {
+    fun getForecastData() {
 
-        viewModelScope.launch {
-            //設定 WeatherApi 狀態為 LOADING
-            _status.value = WeatherApiStatus.LOADING
-            Log.d(TAG, "status: ${status.value}")
-            try {
-                // 呼叫 WeatherApi 取得所有資料
-                val allData = WeatherApi.retrofitService.getForecastData(key = API_KEY)
+        //設定 WeatherApi 狀態為 LOADING
+        _status.value = WeatherApiStatus.LOADING
+        Log.d(TAG, "status: ${status.value}")
 
-                // 新增一個 mapArrayList 存放所需資料
-                val mapArrayList = ArrayList<MutableMap<String, String>>()
+        // 呼叫 WeatherApi 取得所有資料
+        val call = WeatherApi.retrofitService.getForecastData(key = API_KEY)
 
-                allData.records.location.forEachIndexed { index, location ->
-                    // 新增一個 map 存放資料(key, value)
-                    val hashMap: MutableMap<String, String> = mutableMapOf()
-
-                    val locationName = location.locationName
-                    //Log.d(TAG, "index: $index, locationName: $locationName")
-                    hashMap.put("location", locationName)
-
-                    location.weatherElement.forEachIndexed { index, weatherElement ->
-                        val elementName = weatherElement.elementName
-                        //Log.d(TAG, "index: $index, elementName: $elementName")
-
-                        weatherElement.time.forEachIndexed { index, time ->
-                            val timeIndex = index+1
-                            val startTime = datetimeFormat(time.startTime)
-                            val endTime = datetimeFormat(time.endTime)
-                            val timeString = "$startTime - $endTime"
-                            hashMap.put("time$timeIndex", timeString)
-
-                            val parameter = time.parameter.parameterName
-                            val name = elementName
-                            hashMap.put("$name$timeIndex", parameter)
-
-                            if (name=="Wx") {
-                                // 取得天氣代碼
-                                val weatherCode = time.parameter.parameterValue
-                                hashMap.put("weatherCode$timeIndex", weatherCode)
-                            }
-                        }
-                    }
-                    // 將 map 加入 array list 中
-                    mapArrayList.add(hashMap)
-                    //Log.d("$index: ", "${mapArrayList[index]}")
+        call.enqueue(object: Callback<ForecastData> {
+            override fun onResponse(
+                call: Call<ForecastData>,
+                response: Response<ForecastData>
+            ) {
+                // 如果 response 成功
+                if (response.isSuccessful) {
+                    // 將得到的資料儲存在 forecastData
+                    val forecastData = response.body()
+                    // 處理資料，將 forecastData 轉成 ArrayList
+                    val newArrayList = handleData(forecastData)
+                    // 將 dataArrayList 設為處理好的資料
+                    dataArrayList = newArrayList
+                    // 設定 WeatherApi 狀態為 DONE
+                    _status.value = WeatherApiStatus.DONE
+                    Log.d(TAG, "status: ${_status.value}")
+                } else {
+                    Log.d(TAG, "Error Code: ${response.code()}")
+                    //設定 WeatherApi 狀態為 ERROR
+                    _status.value = WeatherApiStatus.ERROR
+                    Log.d(TAG, "status: ${_status.value}")
+                    //設 forecastItemList 為空 list
+                    _forecastItemList.value = listOf()
                 }
-                // 進一步處理資料
-                handleData(mapArrayList)
-            } catch (e: Exception) {
-                Log.d(TAG, "Failure: ${e.message}")
+            }
+
+            override fun onFailure(call: Call<ForecastData>, t: Throwable) {
                 //設定 WeatherApi 狀態為 ERROR
                 _status.value = WeatherApiStatus.ERROR
+                Log.d(TAG, "status: ${_status.value}")
                 //設 forecastItemList 為空 list
                 _forecastItemList.value = listOf()
+                Log.d(TAG, "Failure: ${t.message}")
             }
-        }
+        })
     }
 
     private fun datetimeFormat(timeString: String): String {
@@ -101,12 +90,10 @@ class ForecastViewModel() : ViewModel() {
 
         // 取得今天日期
         val now = LocalDate.now()
-        val date: String
 
-        if (now.equals(dt.toLocalDate())) {
-            date = "今天"
-        } else {
-            date = "明天"
+        val date = when(now.equals(dt.toLocalDate())) {
+            true -> "今天"
+            false -> "明天"
         }
         //Log.d(TAG, "date: $date")
 
@@ -119,9 +106,56 @@ class ForecastViewModel() : ViewModel() {
         return formatTime
     }
 
-    // 處理 data (array list 可使用 key 取得 value)
-    private fun handleData(arrayList: ArrayList<MutableMap<String, String>>) {
+    // 將所需資料存在 map 中，再用 ArrayList 包起來
+    private fun handleData(forecastData: ForecastData?)
+    : ArrayList<MutableMap<String, String>> {
 
+        // 新增一個 mapArrayList 存放所需資料
+        val mapArrayList = ArrayList<MutableMap<String, String>>()
+
+        forecastData?.records?.location?.forEach { location ->
+            // 新增一個 map 存放資料(key, value)
+            val hashMap: MutableMap<String, String> = mutableMapOf()
+
+            val locationName = location.locationName
+            //Log.d(TAG, "locationName: $locationName")
+            hashMap.put("location", locationName)
+
+            location.weatherElement.forEach { weatherElement ->
+                val elementName = weatherElement.elementName
+                //Log.d(TAG, "elementName: $elementName")
+
+                weatherElement.time.forEachIndexed { index, time ->
+                    val timeIndex = index+1
+                    val startTime = datetimeFormat(time.startTime)
+                    val endTime = datetimeFormat(time.endTime)
+                    val timeString = "$startTime - $endTime"
+                    hashMap.put("time$timeIndex", timeString)
+
+                    val parameter = time.parameter.parameterName
+                    val name = elementName
+                    hashMap.put("$name$timeIndex", parameter)
+
+                    if (name=="Wx") {
+                        // 取得天氣代碼
+                        val weatherCode = time.parameter.parameterValue
+                        hashMap.put("weatherCode$timeIndex", weatherCode)
+                    }
+                }
+            }
+            // 將 map 加入 ArrayList 中
+            mapArrayList.add(hashMap)
+            //Log.d("$mapArrayList")
+        }
+
+        // 轉換溫度格式
+        val newArrayList = temperatureFormat(mapArrayList)
+
+        return newArrayList
+    }
+
+    private fun temperatureFormat(arrayList: ArrayList<MutableMap<String, String>>)
+    : ArrayList<MutableMap<String, String>> {
         // temperature format
         arrayList.forEachIndexed { index, mutableMap ->
 
@@ -140,14 +174,10 @@ class ForecastViewModel() : ViewModel() {
             }
             Log.d("$index: ", "${arrayList[index]}")
         }
-        //將 dataArrayList 設為處理好的資料
-        dataArrayList = arrayList
-        //設定 WeatherApi 狀態為 DONE
-        _status.value = WeatherApiStatus.DONE
-        Log.d(TAG, "status: ${_status.value}")
+        return arrayList
     }
 
-    // 轉換成 transToForecastItem
+    // 轉換成 ForecastItem
     private fun transToForecastItem(arrayList: ArrayList<MutableMap<String, String>>) {
         val tempList = mutableListOf<ForecastItem>()
         arrayList.forEachIndexed { index, mutableMap ->
@@ -178,9 +208,9 @@ class ForecastViewModel() : ViewModel() {
 
     // 根據選擇的區域設定不同資料
     fun setAreaData(cityList: MutableList<String>) {
-        //新增一個空 array list
+        //新增一個空 ArrayList
         val tempArrayList: ArrayList<MutableMap<String, String>> = arrayListOf()
-        //空 array list 的 index
+        //空 ArrayList 的 index
         var index = 0
         //跑需要加入空 list 的每個縣市
         for (city in cityList) {
@@ -198,7 +228,7 @@ class ForecastViewModel() : ViewModel() {
             index += 1
         }
         Log.d(TAG, "tempArrayList: $tempArrayList")
-        // 將新的 array list 資料轉成 ForecastItem
+        // 將新的 ArrayList 資料轉成 ForecastItem
         transToForecastItem(tempArrayList)
     }
 }

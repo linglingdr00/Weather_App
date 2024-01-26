@@ -1,6 +1,6 @@
 package com.linglingdr00.weather.network
 
-data class WeatherData(
+data class ForecastData(
     val records: Records = Records(),
     val result: Result = Result(),
     val success: String = "" //true

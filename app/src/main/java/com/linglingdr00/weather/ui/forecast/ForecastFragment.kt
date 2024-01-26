@@ -13,19 +13,31 @@ import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.viewModelScope
 import com.linglingdr00.weather.R
 import com.linglingdr00.weather.databinding.FragmentForecastBinding
+import kotlinx.coroutines.launch
 
 
 class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private val TAG = "ForecastFragment"
-    private val viewModel: ForecastViewModel by activityViewModels()
+    private val forecastViewModel: ForecastViewModel by activityViewModels()
     private var binding: FragmentForecastBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+
+        // 每次進入 ForecastFragment 時都 load data
+        forecastViewModel.viewModelScope.launch {
+            try {
+                //載入天氣預報資料
+                forecastViewModel.getForecastData()
+                Log.d(TAG, "載入資料成功")
+            } catch (e: Exception) {
+                Log.d(TAG, "載入資料失敗")
+            }
+        }
     }
 
     override fun onCreateView(
@@ -45,7 +57,7 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
         // 設定 lifecycleOwner
         binding?.lifecycleOwner = this
         // 設定 view model 為 ForecastViewModel
-        binding?.viewModel = viewModel
+        binding?.viewModel = forecastViewModel
         // 設 adapter 為 ForecastAdapter
         binding?.forecastRecyclerView?.adapter = ForecastAdapter()
         // 設定 ForecastItemDecoration 調整 item 邊距
@@ -60,32 +72,20 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
         menu.clear()
         inflater.inflate(R.menu.toolbar_menu, menu)
 
-        val spinnerItem = menu.findItem(R.id.spinner)
-        val spinnerView = spinnerItem?.actionView as Spinner
-
-        /*
-        val str = listOf("北部", "中部", "南部")
-        ArrayAdapter(requireContext(),
-            android.R.layout.simple_spinner_item,
-            str).also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            spinnerView.adapter = adapter
-        }
-        */
+        val mySpinner = menu.findItem(R.id.spinner)
+        val spinner = mySpinner?.actionView as Spinner
 
         ArrayAdapter.createFromResource(
             requireContext(),
             R.array.forecast_array, // 選單中的 item
-            android.R.layout.simple_spinner_item
+            android.R.layout.simple_spinner_item,
         ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
+            // 設定 dropdown 樣式
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            spinnerView.adapter = adapter
+            // 設定 spinner 的 adapter
+            spinner.adapter = adapter
         }
-        spinnerView.onItemSelectedListener = this@ForecastFragment
+        spinner.onItemSelectedListener = this@ForecastFragment
 
     }
 
@@ -100,9 +100,22 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
             else -> resources.getStringArray(R.array.outlying_array).toList() as MutableList<String>
         }
         Log.d(TAG, "position: $position, cityList: $cityList")
-        if (viewModel.status.value == ForecastViewModel.WeatherApiStatus.DONE) {
-            viewModel.setAreaData(cityList)
+
+        // 確認資料處理完成後
+        if (forecastViewModel.status.value == ForecastViewModel.WeatherApiStatus.DONE) {
+            // 設定顯示地區資料
+            forecastViewModel.setAreaData(cityList)
+            Log.d(TAG, "setAreaData()")
         }
+
+        // 當資料處理完成時
+        /*forecastViewModel.status.observe(viewLifecycleOwner) {
+            if (it == ForecastViewModel.WeatherApiStatus.DONE) {
+                // 設定顯示地區資料
+                forecastViewModel.setAreaData(cityList)
+                Log.d(TAG, "setAreaData()")
+            }
+        }*/
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -111,8 +124,10 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onResume() {
         super.onResume()
-        //設定 toolbar title
+        // 設定 toolbar title
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.title_forecast)
+        // 設定 menu
+        setHasOptionsMenu(true)
     }
 
     override fun onDestroyView() {

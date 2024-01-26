@@ -1,17 +1,21 @@
 package com.linglingdr00.weather
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.linglingdr00.weather.databinding.ActivityMainBinding
 import com.linglingdr00.weather.ui.forecast.ForecastViewModel
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val TAG = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,19 +25,24 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        /*val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_forecast, R.id.navigation_location, R.id.navigation_now
-            )
-        )*/
+
         setSupportActionBar(binding.toolbar)
         navView.setupWithNavController(navController)
 
-        //取得 ForecastViewModel
+        Log.d(TAG,"navView selectedItemId: ${navView.selectedItemId}")
+
+        // 取得 ForecastViewModel
         val forecastViewModel: ForecastViewModel by viewModels()
-        //載入天氣預報資料
-        forecastViewModel.getWeatherData()
+        // 預先載入天氣預報資料
+        forecastViewModel.viewModelScope.launch {
+            try {
+                //載入天氣預報資料
+                forecastViewModel.getForecastData()
+                Log.d(TAG, "預先載入資料成功")
+            } catch (e: Exception) {
+                Log.d(TAG, "預先載入資料失敗")
+            }
+        }
+
     }
 }
