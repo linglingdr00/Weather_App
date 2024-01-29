@@ -149,9 +149,9 @@ class NowViewModel : ViewModel() {
     }
 
     // 轉換成 NowItem
-    private fun transToNowItem(arrayList: ArrayList<MutableMap<String, String>>) {
+    private fun transToNowItem(list: List<MutableMap<String, String>>) {
         val tempList = mutableListOf<NowItem>()
-        arrayList.forEach { map ->
+        list.forEach { map ->
             val item = NowItem(
                 map["stationName"].toString(),
                 map["townName"].toString(),
@@ -171,22 +171,12 @@ class NowViewModel : ViewModel() {
 
     // 根據選擇的區域設定不同資料
     fun setCityData(city: String) {
-        //新增一個空 ArrayList
-        val tempArrayList: ArrayList<MutableMap<String, String>> = arrayListOf()
-        //空 ArrayList 的 index
-        var arrayIndex = 0
 
-        dataArrayList.forEachIndexed { index, map ->
-            //找到 countyName 和 city 相同的那筆資料
-            if (map["countyName"].equals(city)) {
-                //將篩選出的資料加入 tempArrayList
-                tempArrayList.add(arrayIndex, dataArrayList[index])
-                //Log.d(TAG, "arrayIndex: $arrayIndex data: ${dataArrayList[index]}")
-                Log.d(TAG, "index:$arrayIndex, add: ${tempArrayList[arrayIndex]}")
-                arrayIndex += 1
-            }
+        val dataList = dataArrayList.filter {
+            it["countyName"].equals(city)
         }
-        Log.d(TAG, "tempArrayList: $tempArrayList")
-        transToNowItem(tempArrayList)
+        //Log.d(TAG, "data: $dataList")
+
+        transToNowItem(dataList)
     }
 }

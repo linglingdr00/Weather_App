@@ -132,8 +132,8 @@ class NowFragment : Fragment(), AdapterView.OnItemSelectedListener {
             nowViewModel.status.observe(viewLifecycleOwner) {
                 if (it == NowViewModel.NowWeatherApiStatus.DONE) {
                     // 設定顯示 city 資料
-                    nowViewModel.setCityData(city)
                     Log.d(TAG, "setCityData()")
+                    nowViewModel.setCityData(city)
                 }
             }
         }

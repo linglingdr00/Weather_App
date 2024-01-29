@@ -178,26 +178,26 @@ class ForecastViewModel() : ViewModel() {
     }
 
     // 轉換成 ForecastItem
-    private fun transToForecastItem(arrayList: ArrayList<MutableMap<String, String>>) {
+    private fun transToForecastItem(list: List<MutableMap<String, String>>) {
         val tempList = mutableListOf<ForecastItem>()
-        arrayList.forEachIndexed { index, mutableMap ->
+        list.forEach { map ->
             val item = ForecastItem(
-                mutableMap["location"].toString(),
-                mutableMap["time1"].toString(),
-                mutableMap["weatherCode1"].toString(),
-                mutableMap["Wx1"].toString(),
-                mutableMap["PoP1"].toString(),
-                mutableMap["temperature1"].toString(),
-                mutableMap["time2"].toString(),
-                mutableMap["weatherCode2"].toString(),
-                mutableMap["Wx2"].toString(),
-                mutableMap["PoP2"].toString(),
-                mutableMap["temperature2"].toString(),
-                mutableMap["time3"].toString(),
-                mutableMap["weatherCode3"].toString(),
-                mutableMap["Wx3"].toString(),
-                mutableMap["PoP3"].toString(),
-                mutableMap["temperature3"].toString()
+                map["location"].toString(),
+                map["time1"].toString(),
+                map["weatherCode1"].toString(),
+                map["Wx1"].toString(),
+                map["PoP1"].toString(),
+                map["temperature1"].toString(),
+                map["time2"].toString(),
+                map["weatherCode2"].toString(),
+                map["Wx2"].toString(),
+                map["PoP2"].toString(),
+                map["temperature2"].toString(),
+                map["time3"].toString(),
+                map["weatherCode3"].toString(),
+                map["Wx3"].toString(),
+                map["PoP3"].toString(),
+                map["temperature3"].toString()
             )
             tempList += item
             Log.d(TAG, "tempList: $tempList")
@@ -208,27 +208,18 @@ class ForecastViewModel() : ViewModel() {
 
     // 根據選擇的區域設定不同資料
     fun setAreaData(cityList: MutableList<String>) {
-        //新增一個空 ArrayList
-        val tempArrayList: ArrayList<MutableMap<String, String>> = arrayListOf()
-        //空 ArrayList 的 index
-        var index = 0
+        //新增一個空 List
+        val dataList: MutableList<MutableMap<String, String>> = mutableListOf()
         //跑需要加入空 list 的每個縣市
         for (city in cityList) {
-            var tempIndex = 0
-            dataArrayList.forEachIndexed { index, map ->
-                //找到 location 和 city 相同的那筆資料
-                if (map["location"].equals(city)) {
-                    // 將 index 存起來
-                    tempIndex = index
-                }
+            val tempList = dataArrayList.filter {
+                it["location"].equals(city)
             }
-            //將篩選出的資料加入 tempArrayList
-            tempArrayList.add(index, dataArrayList[tempIndex])
-            Log.d(TAG, "index:$index, add: ${tempArrayList[index]}")
-            index += 1
+            //Log.d(TAG, "data: $dataList")
+            dataList += tempList
         }
-        Log.d(TAG, "tempArrayList: $tempArrayList")
+        //Log.d(TAG, "dataList: $dataList")
         // 將新的 ArrayList 資料轉成 ForecastItem
-        transToForecastItem(tempArrayList)
+        transToForecastItem(dataList)
     }
 }

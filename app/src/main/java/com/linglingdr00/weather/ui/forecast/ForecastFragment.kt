@@ -117,8 +117,8 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
         forecastViewModel.status.observe(viewLifecycleOwner) {
             if (it == ForecastViewModel.ForecastWeatherApiStatus.DONE) {
                 // 設定顯示地區資料
-                forecastViewModel.setAreaData(cityList)
                 Log.d(TAG, "setAreaData()")
+                forecastViewModel.setAreaData(cityList)
             }
         }
     }
