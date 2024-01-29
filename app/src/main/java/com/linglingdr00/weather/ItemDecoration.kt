@@ -1,10 +1,10 @@
-package com.linglingdr00.weather.ui.forecast
+package com.linglingdr00.weather
 
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class ForecastItemDecoration: RecyclerView.ItemDecoration() {
+class ItemDecoration: RecyclerView.ItemDecoration() {
     override fun getItemOffsets(
         outRect: Rect,
         view: View,

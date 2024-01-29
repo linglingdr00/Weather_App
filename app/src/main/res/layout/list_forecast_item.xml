@@ -52,7 +52,7 @@
                 app:layout_constraintTop_toBottomOf="@id/timeText1"
                 android:padding="5dp"
                 android:layout_marginTop="2dp"
-                app:weatherImg="@{forecastItem.weatherCode1}"
+                app:forecastWeatherImg="@{forecastItem.weatherCode1}"
                 tools:src="@drawable/storm"/>
 
             <TextView
@@ -116,7 +116,7 @@
                 app:layout_constraintTop_toBottomOf="@id/timeText2"
                 android:padding="5dp"
                 android:layout_marginTop="2dp"
-                app:weatherImg="@{forecastItem.weatherCode2}"
+                app:forecastWeatherImg="@{forecastItem.weatherCode2}"
                 tools:src="@drawable/storm" />
 
             <TextView
@@ -179,7 +179,7 @@
                 app:layout_constraintTop_toBottomOf="@id/timeText3"
                 android:padding="5dp"
                 android:layout_marginTop="2dp"
-                app:weatherImg="@{forecastItem.weatherCode3}"
+                app:forecastWeatherImg="@{forecastItem.weatherCode3}"
                 tools:src="@drawable/storm" />
 
             <TextView

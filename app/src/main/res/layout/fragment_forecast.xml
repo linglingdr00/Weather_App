@@ -28,10 +28,10 @@
             app:layout_constraintRight_toRightOf="parent" />
 
         <ImageView
-            android:id="@+id/status_imageView"
+            android:id="@+id/statusImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:weatherApiStatus="@{viewModel.status}"
+            app:forecastWeatherApiStatus="@{viewModel.status}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

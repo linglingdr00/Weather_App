@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="nowItem"
+            type="com.linglingdr00.weather.ui.now.NowItem" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="6dp"
+        android:elevation="2dp"
+        style="?attr/materialCardViewElevatedStyle">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_bg"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/townText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="10dp"
+                android:text="@{nowItem.townText}"
+                tools:text="三重區"/>
+
+            <TextView
+                android:id="@+id/stationName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/townText"
+                android:text="@{nowItem.stationName}"
+                tools:text="測站: 國一S026K"/>
+
+            <TextView
+                android:id="@+id/weatherTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/townText"
+                android:layout_marginTop="10dp"
+                android:text="現在天氣"/>
+
+            <ImageView
+                android:id="@+id/weatherImg"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weatherTitle"
+                android:padding="5dp"
+                android:layout_marginTop="2dp"
+                app:nowWeatherImg="@{nowItem.weatherText}"
+                tools:src="@drawable/storm"/>
+
+            <TextView
+                android:id="@+id/weatherText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/weatherImg"
+                app:layout_constraintBottom_toBottomOf="@id/weatherImg"
+                app:layout_constraintTop_toTopOf="@+id/weatherImg"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:text="@{nowItem.weatherText}"
+                tools:text="陰有雨"/>
+
+            <TextView
+                android:id="@+id/uvText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/weatherImg"
+                app:layout_constraintBottom_toTopOf="@id/rainText"
+                android:text="@{nowItem.uvText}"
+                tools:text="紫外線指數: 10 UVI"/>
+
+            <TextView
+                android:id="@+id/rainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/uvText"
+                app:layout_constraintBottom_toBottomOf="@id/weatherImg"
+                android:text="@{nowItem.rainText}"
+                tools:text="當日降水量: 100毫米"/>
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weatherImg"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="10dp"
+                android:background="#1A000000" />
+
+            <TextView
+                android:id="@+id/temperatureTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line1"
+                android:layout_marginTop="10dp"
+                android:text="現在氣溫"/>
+
+            <ImageView
+                android:id="@+id/temperatureImg"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/temperatureTitle"
+                android:padding="5dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/thermometer"
+                tools:src="@drawable/thermometer"/>
+
+            <TextView
+                android:id="@+id/temperatureText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/temperatureImg"
+                app:layout_constraintBottom_toBottomOf="@id/temperatureImg"
+                app:layout_constraintTop_toTopOf="@+id/temperatureImg"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:text="@{nowItem.temperatureText}"
+                tools:text="15°C"/>
+
+            <TextView
+                android:id="@+id/lowTemText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/temperatureImg"
+                app:layout_constraintBottom_toTopOf="@id/highTemText"
+                android:text="@{nowItem.lowTemText}"
+                tools:text="紫外線指數: 10 UVI"/>
+
+            <TextView
+                android:id="@+id/highTemText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lowTemText"
+                app:layout_constraintBottom_toBottomOf="@id/temperatureImg"
+                android:text="@{nowItem.highTemText}"
+                tools:text="當日降水量: 100毫米"/>
+
+            <View
+                android:id="@+id/line2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/temperatureImg"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="10dp"
+                android:background="#1A000000" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

@@ -1,5 +1,7 @@
 package com.linglingdr00.weather.network
 
+import com.squareup.moshi.Json
+
 data class ForecastData(
     val records: Records = Records(),
     val result: Result = Result(),
@@ -34,6 +36,7 @@ data class ForecastData(
 
     data class Result(
         val fields: List<Field> = listOf(),
+        @Json(name = "resource_id")
         val resourceId: String = "" //F-C0032-001
     ) {
         data class Field(

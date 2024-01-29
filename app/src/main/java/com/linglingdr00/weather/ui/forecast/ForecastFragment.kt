@@ -14,10 +14,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewModelScope
+import com.linglingdr00.weather.ItemDecoration
 import com.linglingdr00.weather.R
 import com.linglingdr00.weather.databinding.FragmentForecastBinding
 import kotlinx.coroutines.launch
-
 
 class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
@@ -33,9 +33,9 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
             try {
                 //載入天氣預報資料
                 forecastViewModel.getForecastData()
-                Log.d(TAG, "載入資料成功")
+                Log.d(TAG, "載入天氣預報資料成功")
             } catch (e: Exception) {
-                Log.d(TAG, "載入資料失敗")
+                Log.d(TAG, "載入天氣預報資料失敗")
             }
         }
     }
@@ -61,7 +61,7 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
         // 設 adapter 為 ForecastAdapter
         binding?.forecastRecyclerView?.adapter = ForecastAdapter()
         // 設定 ForecastItemDecoration 調整 item 邊距
-        binding?.forecastRecyclerView?.addItemDecoration(ForecastItemDecoration())
+        binding?.forecastRecyclerView?.addItemDecoration(ItemDecoration())
     }
 
     //新增 toolbar 的下拉式選單(spinner) menu
@@ -72,20 +72,25 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
         menu.clear()
         inflater.inflate(R.menu.toolbar_menu, menu)
 
-        val mySpinner = menu.findItem(R.id.spinner)
-        val spinner = mySpinner?.actionView as Spinner
+        val myCitySpinner = menu.findItem(R.id.citySpinner)
+        val citySpinner = myCitySpinner?.actionView as Spinner
+        // 設定顯示 citySpinner
+        citySpinner.visibility = View.INVISIBLE
+
+        val myAreaSpinner = menu.findItem(R.id.areaSpinner)
+        val areaSpinner = myAreaSpinner?.actionView as Spinner
 
         ArrayAdapter.createFromResource(
             requireContext(),
-            R.array.forecast_array, // 選單中的 item
+            R.array.area_array, // 選單中的 item
             android.R.layout.simple_spinner_item,
         ).also { adapter ->
             // 設定 dropdown 樣式
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // 設定 spinner 的 adapter
-            spinner.adapter = adapter
+            areaSpinner.adapter = adapter
         }
-        spinner.onItemSelectedListener = this@ForecastFragment
+        areaSpinner.onItemSelectedListener = this@ForecastFragment
 
     }
 
@@ -102,23 +107,23 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
         Log.d(TAG, "position: $position, cityList: $cityList")
 
         // 確認資料處理完成後
-        if (forecastViewModel.status.value == ForecastViewModel.WeatherApiStatus.DONE) {
+        /*if (forecastViewModel.status.value == ForecastViewModel.ForecastWeatherApiStatus.DONE) {
             // 設定顯示地區資料
             forecastViewModel.setAreaData(cityList)
             Log.d(TAG, "setAreaData()")
-        }
+        }*/
 
         // 當資料處理完成時
-        /*forecastViewModel.status.observe(viewLifecycleOwner) {
-            if (it == ForecastViewModel.WeatherApiStatus.DONE) {
+        forecastViewModel.status.observe(viewLifecycleOwner) {
+            if (it == ForecastViewModel.ForecastWeatherApiStatus.DONE) {
                 // 設定顯示地區資料
                 forecastViewModel.setAreaData(cityList)
                 Log.d(TAG, "setAreaData()")
             }
-        }*/
+        }
     }
 
-    override fun onNothingSelected(p0: AdapterView<*>?) {
+    override fun onNothingSelected(parent: AdapterView<*>?) {
         Log.d(TAG, "onNothingSelected")
     }
 

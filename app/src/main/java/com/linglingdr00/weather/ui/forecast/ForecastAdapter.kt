@@ -28,12 +28,9 @@ class ForecastAdapter: ListAdapter<ForecastItem, ForecastAdapter.ForecastViewHol
         }
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ForecastViewHolder {
-        return ForecastViewHolder(ListForecastItemBinding.inflate(
-            LayoutInflater.from(parent.context)))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForecastViewHolder {
+        val itemView = ListForecastItemBinding.inflate(LayoutInflater.from(parent.context))
+        return ForecastViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ForecastViewHolder, position: Int) {

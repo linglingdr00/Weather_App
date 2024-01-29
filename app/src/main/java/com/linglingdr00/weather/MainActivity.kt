@@ -10,6 +10,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.linglingdr00.weather.databinding.ActivityMainBinding
 import com.linglingdr00.weather.ui.forecast.ForecastViewModel
+import com.linglingdr00.weather.ui.now.NowViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -38,9 +39,22 @@ class MainActivity : AppCompatActivity() {
             try {
                 //載入天氣預報資料
                 forecastViewModel.getForecastData()
-                Log.d(TAG, "預先載入資料成功")
+                Log.d(TAG, "預先載入天氣預報資料成功")
             } catch (e: Exception) {
-                Log.d(TAG, "預先載入資料失敗")
+                Log.d(TAG, "預先載入天氣預報資料失敗")
+            }
+        }
+
+        // 取得 NowViewModel
+        val nowViewModel: NowViewModel by viewModels()
+        // 預先載入現在天氣資料
+        nowViewModel.viewModelScope.launch {
+            try {
+                //載入現在天氣資料
+                nowViewModel.getNowData()
+                Log.d(TAG, "預先載入現在天氣資料成功")
+            } catch (e: Exception) {
+                Log.d(TAG, "預先載入現在天氣資料失敗")
             }
         }
 

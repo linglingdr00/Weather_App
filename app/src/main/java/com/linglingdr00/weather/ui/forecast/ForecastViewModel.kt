@@ -25,12 +25,12 @@ class ForecastViewModel() : ViewModel() {
 
     // 儲存取得資料的 ArrayList
     private var dataArrayList: ArrayList<MutableMap<String, String>> = arrayListOf()
-    // WeatherApi 狀態的 enum class
-    enum class WeatherApiStatus { LOADING, ERROR, DONE }
+    // ForecastWeatherApi 狀態的 enum class
+    enum class ForecastWeatherApiStatus { LOADING, ERROR, DONE }
 
-    // 儲存 WeatherApi 的狀態
-    private val _status = MutableLiveData<WeatherApiStatus>()
-    val status: LiveData<WeatherApiStatus> = _status
+    // 儲存 ForecastWeatherApi 的狀態
+    private val _status = MutableLiveData<ForecastWeatherApiStatus>()
+    val status: LiveData<ForecastWeatherApiStatus> = _status
 
     init {
         //getForecastData()
@@ -38,11 +38,11 @@ class ForecastViewModel() : ViewModel() {
 
     fun getForecastData() {
 
-        //設定 WeatherApi 狀態為 LOADING
-        _status.value = WeatherApiStatus.LOADING
+        //設定 ForecastWeatherApi 狀態為 LOADING
+        _status.value = ForecastWeatherApiStatus.LOADING
         Log.d(TAG, "status: ${status.value}")
 
-        // 呼叫 WeatherApi 取得所有資料
+        // 呼叫 ForecastWeatherApi 取得所有資料
         val call = WeatherApi.retrofitService.getForecastData(key = API_KEY)
 
         call.enqueue(object: Callback<ForecastData> {
@@ -58,13 +58,13 @@ class ForecastViewModel() : ViewModel() {
                     val newArrayList = handleData(forecastData)
                     // 將 dataArrayList 設為處理好的資料
                     dataArrayList = newArrayList
-                    // 設定 WeatherApi 狀態為 DONE
-                    _status.value = WeatherApiStatus.DONE
+                    // 設定 ForecastWeatherApi 狀態為 DONE
+                    _status.value = ForecastWeatherApiStatus.DONE
                     Log.d(TAG, "status: ${_status.value}")
                 } else {
                     Log.d(TAG, "Error Code: ${response.code()}")
-                    //設定 WeatherApi 狀態為 ERROR
-                    _status.value = WeatherApiStatus.ERROR
+                    //設定 ForecastWeatherApi 狀態為 ERROR
+                    _status.value = ForecastWeatherApiStatus.ERROR
                     Log.d(TAG, "status: ${_status.value}")
                     //設 forecastItemList 為空 list
                     _forecastItemList.value = listOf()
@@ -73,7 +73,7 @@ class ForecastViewModel() : ViewModel() {
 
             override fun onFailure(call: Call<ForecastData>, t: Throwable) {
                 //設定 WeatherApi 狀態為 ERROR
-                _status.value = WeatherApiStatus.ERROR
+                _status.value = ForecastWeatherApiStatus.ERROR
                 Log.d(TAG, "status: ${_status.value}")
                 //設 forecastItemList 為空 list
                 _forecastItemList.value = listOf()
@@ -119,7 +119,7 @@ class ForecastViewModel() : ViewModel() {
 
             val locationName = location.locationName
             //Log.d(TAG, "locationName: $locationName")
-            hashMap.put("location", locationName)
+            hashMap["location"] = locationName
 
             location.weatherElement.forEach { weatherElement ->
                 val elementName = weatherElement.elementName
@@ -130,16 +130,16 @@ class ForecastViewModel() : ViewModel() {
                     val startTime = datetimeFormat(time.startTime)
                     val endTime = datetimeFormat(time.endTime)
                     val timeString = "$startTime - $endTime"
-                    hashMap.put("time$timeIndex", timeString)
+                    hashMap["time$timeIndex"] = timeString
 
                     val parameter = time.parameter.parameterName
                     val name = elementName
-                    hashMap.put("$name$timeIndex", parameter)
+                    hashMap["$name$timeIndex"] = parameter
 
                     if (name=="Wx") {
                         // 取得天氣代碼
                         val weatherCode = time.parameter.parameterValue
-                        hashMap.put("weatherCode$timeIndex", weatherCode)
+                        hashMap["weatherCode$timeIndex"] = weatherCode
                     }
                 }
             }
@@ -161,13 +161,13 @@ class ForecastViewModel() : ViewModel() {
 
             for (i in 1..3) {
                 // 把 MinT(最低溫) 和 MaxT(最高溫) 結合成一個 string
-                val minT = mutableMap.get("MinT$i")
+                val minT = mutableMap["MinT$i"]
                 //Log.d(TAG, "minT: $minT")
-                val maxT = mutableMap.get("MaxT$i")
+                val maxT = mutableMap["MaxT$i"]
                 //Log.d(TAG, "maxT: $maxT")
                 val temperature = "$minT°C - $maxT°C"
                 //Log.d(TAG, "temperature$i: $temperature")
-                mutableMap.put("temperature$i", temperature)
+                mutableMap["temperature$i"] = temperature
                 // 移除 MinT 和 MaxT
                 mutableMap.remove("MinT$i")
                 mutableMap.remove("MaxT$i")
@@ -182,22 +182,22 @@ class ForecastViewModel() : ViewModel() {
         val tempList = mutableListOf<ForecastItem>()
         arrayList.forEachIndexed { index, mutableMap ->
             val item = ForecastItem(
-                mutableMap.get("location").toString(),
-                mutableMap.get("time1").toString(),
-                mutableMap.get("weatherCode1").toString(),
-                mutableMap.get("Wx1").toString(),
-                mutableMap.get("PoP1").toString(),
-                mutableMap.get("temperature1").toString(),
-                mutableMap.get("time2").toString(),
-                mutableMap.get("weatherCode2").toString(),
-                mutableMap.get("Wx2").toString(),
-                mutableMap.get("PoP2").toString(),
-                mutableMap.get("temperature2").toString(),
-                mutableMap.get("time3").toString(),
-                mutableMap.get("weatherCode3").toString(),
-                mutableMap.get("Wx3").toString(),
-                mutableMap.get("PoP3").toString(),
-                mutableMap.get("temperature3").toString()
+                mutableMap["location"].toString(),
+                mutableMap["time1"].toString(),
+                mutableMap["weatherCode1"].toString(),
+                mutableMap["Wx1"].toString(),
+                mutableMap["PoP1"].toString(),
+                mutableMap["temperature1"].toString(),
+                mutableMap["time2"].toString(),
+                mutableMap["weatherCode2"].toString(),
+                mutableMap["Wx2"].toString(),
+                mutableMap["PoP2"].toString(),
+                mutableMap["temperature2"].toString(),
+                mutableMap["time3"].toString(),
+                mutableMap["weatherCode3"].toString(),
+                mutableMap["Wx3"].toString(),
+                mutableMap["PoP3"].toString(),
+                mutableMap["temperature3"].toString()
             )
             tempList += item
             Log.d(TAG, "tempList: $tempList")
@@ -217,7 +217,7 @@ class ForecastViewModel() : ViewModel() {
             var tempIndex = 0
             dataArrayList.forEachIndexed { index, map ->
                 //找到 location 和 city 相同的那筆資料
-                if (map.get("location").equals(city)) {
+                if (map["location"].equals(city)) {
                     // 將 index 存起來
                     tempIndex = index
                 }

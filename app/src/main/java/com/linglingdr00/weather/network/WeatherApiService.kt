@@ -28,6 +28,13 @@ interface WeatherApiService {
         @Query("Authorization") key: String,
         @Query("locationName") city: String? = null
     ): Call<ForecastData>
+
+    @GET("v1/rest/datastore/O-A0003-001")
+    fun getNowData(
+        @Query("Authorization") key: String,
+        @Query("StationName") station: String? = null
+    ): Call<NowData>
+
 }
 
 object WeatherApi {
