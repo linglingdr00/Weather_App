@@ -112,7 +112,7 @@ class NowFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
             ArrayAdapter.createFromResource(
                 requireContext(),
-                cityList!!, // 選單中的 item
+                cityList, // 選單中的 item
                 android.R.layout.simple_spinner_item,
             ).also { adapter ->
                 // 設定 dropdown 樣式

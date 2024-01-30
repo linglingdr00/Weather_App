@@ -97,21 +97,15 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
     // 當 spinner menu 選擇 item 時的動作
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         Log.d(TAG, "onItemSelected: $position, $id")
-        val cityList = when (position) {
-            0 -> resources.getStringArray(R.array.northern_array).toList() as MutableList<String>
-            1 -> resources.getStringArray(R.array.central_array).toList() as MutableList<String>
-            2 -> resources.getStringArray(R.array.southern_array).toList() as MutableList<String>
-            3 -> resources.getStringArray(R.array.eastern_array).toList() as MutableList<String>
-            else -> resources.getStringArray(R.array.outlying_array).toList() as MutableList<String>
+        val cityResource = when (position) {
+            0 -> R.array.northern_array
+            1 -> R.array.central_array
+            2 -> R.array.southern_array
+            3 -> R.array.eastern_array
+            else -> R.array.outlying_array
         }
+        val cityList = resources.getStringArray(cityResource).toList() as MutableList<String>
         Log.d(TAG, "position: $position, cityList: $cityList")
-
-        // 確認資料處理完成後
-        /*if (forecastViewModel.status.value == ForecastViewModel.ForecastWeatherApiStatus.DONE) {
-            // 設定顯示地區資料
-            forecastViewModel.setAreaData(cityList)
-            Log.d(TAG, "setAreaData()")
-        }*/
 
         // 當資料處理完成時
         forecastViewModel.status.observe(viewLifecycleOwner) {
