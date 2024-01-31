@@ -172,7 +172,7 @@ class ForecastViewModel() : ViewModel() {
                 mutableMap.remove("MinT$i")
                 mutableMap.remove("MaxT$i")
             }
-            Log.d("$index: ", "${arrayList[index]}")
+            //Log.d(TAG, "$index: ${arrayList[index]}")
         }
         return arrayList
     }

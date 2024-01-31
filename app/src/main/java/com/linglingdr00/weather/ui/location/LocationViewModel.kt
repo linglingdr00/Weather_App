@@ -1,13 +1,15 @@
 package com.linglingdr00.weather.ui.location
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
+
 
 class LocationViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "目前位置"
+    private val TAG = "LocationViewModel"
+
+    fun receiveLocation(longitude: Double?, latitude:Double?) {
+        Log.d(TAG, "經度: $longitude, 緯度: $latitude")
     }
-    val text: LiveData<String> = _text
+
 }
