@@ -149,7 +149,7 @@ class NowViewModel : ViewModel() {
     }
 
     // 轉換成 NowItem
-    private fun transToNowItem(list: List<MutableMap<String, String>>) {
+    private fun transToNowItem(list: List<MutableMap<String, String>>): MutableList<NowItem> {
         val tempList = mutableListOf<NowItem>()
         list.forEach { map ->
             val item = NowItem(
@@ -165,8 +165,7 @@ class NowViewModel : ViewModel() {
             tempList += item
             Log.d(TAG, "tempList: $tempList")
         }
-        _nowItemList.value = tempList
-        Log.d(TAG, "_nowItem: ${_nowItemList.value}")
+        return tempList
     }
 
     // 根據選擇的區域設定不同資料
@@ -177,6 +176,18 @@ class NowViewModel : ViewModel() {
         }
         //Log.d(TAG, "data: $dataList")
 
-        transToNowItem(dataList)
+        val tempList = transToNowItem(dataList)
+        _nowItemList.value = tempList
+        Log.d(TAG, "_nowItem: ${_nowItemList.value}")
+    }
+
+    fun getMyTownData(town: String): MutableList<NowItem> {
+        val dataList = dataArrayList.filter {
+            it["townName"].equals(town)
+        }
+        //Log.d(TAG, "data: $dataList")
+
+        val tempList = transToNowItem(dataList)
+        return tempList
     }
 }

@@ -80,6 +80,8 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val myAreaSpinner = menu.findItem(R.id.areaSpinner)
         val areaSpinner = myAreaSpinner?.actionView as Spinner
 
+        myAreaSpinner.isVisible = true
+
         ArrayAdapter.createFromResource(
             requireContext(),
             R.array.area_array, // 選單中的 item

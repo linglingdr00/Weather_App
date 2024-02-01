@@ -36,7 +36,7 @@ class ForecastViewModel() : ViewModel() {
         //getForecastData()
     }
 
-    fun getForecastData() {
+    fun getForecastData(city: String? = null) {
 
         //設定 ForecastWeatherApi 狀態為 LOADING
         _status.value = ForecastWeatherApiStatus.LOADING
@@ -178,7 +178,7 @@ class ForecastViewModel() : ViewModel() {
     }
 
     // 轉換成 ForecastItem
-    private fun transToForecastItem(list: List<MutableMap<String, String>>) {
+    private fun transToForecastItem(list: List<MutableMap<String, String>>): MutableList<ForecastItem> {
         val tempList = mutableListOf<ForecastItem>()
         list.forEach { map ->
             val item = ForecastItem(
@@ -202,8 +202,9 @@ class ForecastViewModel() : ViewModel() {
             tempList += item
             Log.d(TAG, "tempList: $tempList")
         }
-        _forecastItemList.value = tempList
-        Log.d(TAG, "_forecastItem: ${_forecastItemList.value}")
+        //_forecastItemList.value = tempList
+        //Log.d(TAG, "_forecastItem: ${_forecastItemList.value}")
+        return tempList
     }
 
     // 根據選擇的區域設定不同資料
@@ -219,7 +220,20 @@ class ForecastViewModel() : ViewModel() {
             dataList += tempList
         }
         //Log.d(TAG, "dataList: $dataList")
+
         // 將新的 ArrayList 資料轉成 ForecastItem
-        transToForecastItem(dataList)
+        val itemList = transToForecastItem(dataList)
+        _forecastItemList.value = itemList
+        Log.d(TAG, "_forecastItem: ${_forecastItemList.value}")
+    }
+
+    fun getMyCityData(city: String): MutableList<ForecastItem> {
+        //新增一個空 List
+        val tempList = dataArrayList.filter {
+            it["location"].equals(city)
+        }
+        //Log.d(TAG, "data: $tempList")
+        // 將資料轉成 ForecastItem
+        return transToForecastItem(tempList)
     }
 }

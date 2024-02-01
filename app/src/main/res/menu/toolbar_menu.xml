@@ -5,6 +5,7 @@
         android:id="@+id/areaSpinner"
         android:title="北區"
         app:showAsAction="ifRoom"
+        android:visible="false"
         app:actionViewClass="androidx.appcompat.widget.AppCompatSpinner"/>
     <item
         android:id="@+id/citySpinner"
@@ -12,4 +13,10 @@
         app:showAsAction="ifRoom"
         android:visible="false"
         app:actionViewClass="androidx.appcompat.widget.AppCompatSpinner"/>
+    <item
+        android:id="@+id/subTitle"
+        android:title="新北市三重區"
+        app:showAsAction="ifRoom"
+        android:visible="false"
+        app:actionViewClass="android.widget.TextView" />
 </menu>

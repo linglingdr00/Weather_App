@@ -82,7 +82,8 @@ class NowFragment : Fragment(), AdapterView.OnItemSelectedListener {
         myCitySpinner = menu.findItem(R.id.citySpinner)
         citySpinner = myCitySpinner?.actionView as Spinner
 
-        // 設定顯示 citySpinner
+        // 設定顯示 myAreaSpinner 和 myCitySpinner
+        myAreaSpinner.isVisible = true
         myCitySpinner?.isVisible = true
 
         ArrayAdapter.createFromResource(

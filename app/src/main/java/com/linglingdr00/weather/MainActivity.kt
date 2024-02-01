@@ -3,11 +3,6 @@ package com.linglingdr00.weather
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -25,35 +20,33 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.linglingdr00.weather.databinding.ActivityMainBinding
 import com.linglingdr00.weather.ui.forecast.ForecastViewModel
-import com.linglingdr00.weather.ui.location.LocationViewModel
 import com.linglingdr00.weather.ui.now.NowViewModel
 import kotlinx.coroutines.launch
-import java.util.Locale
 
-
-class MainActivity : AppCompatActivity(), LocationListener {
+class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
     private lateinit var binding: ActivityMainBinding
-    private val locationViewModel: LocationViewModel by viewModels()
-    private var locationManager: LocationManager?= null
-    private val PERMISSION_REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //載入 BottomNavigation
+        loadBottomNavigation()
+
+        //預先載入資料
+        preLoadData()
+
+    }
+
+    private fun loadBottomNavigation() {
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
         setSupportActionBar(binding.toolbar)
         navView.setupWithNavController(navController)
-
-        //預先載入資料
-        preLoadData()
-
     }
 
     override fun onStart() {
@@ -137,8 +130,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     private fun permissionApproved() {
+        GlobalVariable.havePermission = true
         Snackbar.make(binding.container, R.string.permission_approved, Snackbar.LENGTH_LONG).show()
-        getLocation()
     }
 
     private fun permissionDenied() {
@@ -171,47 +164,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 Log.d(TAG, "預先載入現在天氣資料失敗")
             }
         }
-    }
-
-    private fun getLocation() {
-        Log.d(TAG, "getLocation()")
-
-        locationManager = applicationContext.getSystemService(LOCATION_SERVICE) as LocationManager
-        if (ActivityCompat.checkSelfPermission(
-                this@MainActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this@MainActivity,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            //如果沒有 location 權限
-            return
-        }
-        //要求經緯度
-        locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER,0L,0F,this@MainActivity)
-    }
-
-    private fun tranToAddress(latitude: Double, longitude: Double) {
-        val addressList: List<Address>?
-        val geocoder = Geocoder(this, Locale.getDefault())
-
-        //得到地址資訊
-        addressList = geocoder.getFromLocation(latitude, longitude, 1)
-        val address = addressList!![0].getAddressLine(0)
-        val city = addressList[0].adminArea
-        Log.d(TAG, "address: $address")
-        Log.d(TAG, "city: $city")
-    }
-
-    override fun onLocationChanged(location: Location) {
-        val latitude = location.latitude
-        val longitude = location.longitude
-        Log.d(TAG, "location latitude: ${location.latitude}, longitude: ${location.longitude}")
-        //將經緯度轉成地址
-        tranToAddress(latitude, longitude)
-        //停止更新經緯度
-        locationManager?.removeUpdates(this@MainActivity)
     }
 
 }
