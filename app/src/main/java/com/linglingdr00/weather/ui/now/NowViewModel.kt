@@ -182,12 +182,15 @@ class NowViewModel : ViewModel() {
     }
 
     fun getMyTownData(town: String): MutableList<NowItem> {
+        //新增一個空 List
+        val myList: MutableList<MutableMap<String, String>> = mutableListOf()
         val dataList = dataArrayList.filter {
             it["townName"].equals(town)
         }
-        //Log.d(TAG, "data: $dataList")
 
-        val tempList = transToNowItem(dataList)
+        myList += dataList[0]
+
+        val tempList = transToNowItem(myList)
         return tempList
     }
 }

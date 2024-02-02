@@ -228,9 +228,14 @@ class ForecastViewModel() : ViewModel() {
     }
 
     fun getMyCityData(city: String): MutableList<ForecastItem> {
-        //新增一個空 List
+
+        val myCity = when(city) {
+            "台北市" -> "臺北市"
+            else -> city
+        }
+
         val tempList = dataArrayList.filter {
-            it["location"].equals(city)
+            it["location"].equals(myCity)
         }
         //Log.d(TAG, "data: $tempList")
         // 將資料轉成 ForecastItem

@@ -11,27 +11,16 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/locationFragment"
+        android:id="@+id/location_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/liner_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/locationText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:paddingTop="20dp"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="5dp"
-                app:locationText="@{viewModel.location}"
-                tools:text="您的位置: 新北市三重區"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/location_now_recycler_view"
@@ -49,6 +38,16 @@
                 app:locationForecastData="@{viewModel.forecastItem}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/location_imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:locationStatus="@{viewModel.status}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -72,12 +72,12 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
         menu.clear()
         inflater.inflate(R.menu.toolbar_menu, menu)
 
-        val myCitySpinner = menu.findItem(R.id.citySpinner)
+        val myCitySpinner = menu.findItem(R.id.city_spinner)
         val citySpinner = myCitySpinner?.actionView as Spinner
         // 設定顯示 citySpinner
         citySpinner.visibility = View.INVISIBLE
 
-        val myAreaSpinner = menu.findItem(R.id.areaSpinner)
+        val myAreaSpinner = menu.findItem(R.id.area_spinner)
         val areaSpinner = myAreaSpinner?.actionView as Spinner
 
         myAreaSpinner.isVisible = true

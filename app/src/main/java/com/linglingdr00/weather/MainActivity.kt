@@ -55,6 +55,13 @@ class MainActivity : AppCompatActivity() {
         checkLocationPermission()
     }
 
+    override fun onDestroy() {
+        Log.d(TAG, "onDestroy")
+        //關閉 app 時清除 location，下次開啟時會再重新定位
+        GlobalVariable.haveLocation = false
+        super.onDestroy()
+    }
+
     private fun checkLocationPermission() {
         when {
             //當已取得權限時
@@ -135,6 +142,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun permissionDenied() {
+        GlobalVariable.havePermission = false
         Snackbar.make(binding.container, R.string.permission_denied, Snackbar.LENGTH_LONG).show()
     }
 

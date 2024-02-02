@@ -10,6 +10,7 @@ import com.linglingdr00.weather.ui.forecast.ForecastItem
 import com.linglingdr00.weather.ui.forecast.ForecastViewModel.ForecastWeatherApiStatus
 import com.linglingdr00.weather.ui.location.LocationForecastAdapter
 import com.linglingdr00.weather.ui.location.LocationNowAdapter
+import com.linglingdr00.weather.ui.location.LocationViewModel.LocationStatus
 import com.linglingdr00.weather.ui.now.NowAdapter
 import com.linglingdr00.weather.ui.now.NowItem
 import com.linglingdr00.weather.ui.now.NowViewModel.NowWeatherApiStatus
@@ -140,14 +141,6 @@ fun setPopText(textView: TextView, weatherPop: String?) {
     }
 }
 
-//設定 location 文字
-@BindingAdapter("locationText")
-fun setLocationText(textView: TextView, location: Array<String>?) {
-    location.let {
-        textView.text = "您的位置: ${location?.get(0)} ${location?.get(1)}"
-    }
-}
-
 /* 設定 forecast weather api status 以顯示 loading 和 error status 的 icon */
 @BindingAdapter("forecastWeatherApiStatus")
 fun bindForecastStatus(imageView: ImageView, status: ForecastWeatherApiStatus?) {
@@ -189,6 +182,35 @@ fun bindNowStatus(imageView: ImageView, status: NowWeatherApiStatus?) {
             imageView.setImageResource(R.drawable.ic_connection_error)
         }
         NowWeatherApiStatus.DONE -> {
+            // 將 state ImageView 設定為不可顯示
+            imageView.visibility = View.GONE
+        }
+        else -> {}
+    }
+}
+
+@BindingAdapter("locationStatus")
+fun bindLocationStatus(imageView: ImageView, status: LocationStatus?) {
+    when (status) {
+        LocationStatus.NO_PERMISSION -> {
+            // 將 state ImageView 設為可顯示
+            imageView.visibility = View.VISIBLE
+            // 設定 location off 圖示
+            imageView.setImageResource(R.drawable.ic_location_off)
+        }
+        LocationStatus.LOADING -> {
+            // 將 status ImageView 設為可顯示
+            imageView.visibility = View.VISIBLE
+            // 設定 loading animation
+            imageView.setImageResource(R.drawable.loading_animation)
+        }
+        LocationStatus.ERROR -> {
+            // 將 state ImageView 設為可顯示
+            imageView.visibility = View.VISIBLE
+            // 設定 connection error 圖示
+            imageView.setImageResource(R.drawable.ic_connection_error)
+        }
+        LocationStatus.DONE -> {
             // 將 state ImageView 設定為不可顯示
             imageView.visibility = View.GONE
         }

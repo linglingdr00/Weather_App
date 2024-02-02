@@ -76,10 +76,10 @@ class NowFragment : Fragment(), AdapterView.OnItemSelectedListener {
         menu.clear()
         inflater.inflate(R.menu.toolbar_menu, menu)
 
-        val myAreaSpinner = menu.findItem(R.id.areaSpinner)
+        val myAreaSpinner = menu.findItem(R.id.area_spinner)
         val areaSpinner = myAreaSpinner?.actionView as Spinner
 
-        myCitySpinner = menu.findItem(R.id.citySpinner)
+        myCitySpinner = menu.findItem(R.id.city_spinner)
         citySpinner = myCitySpinner?.actionView as Spinner
 
         // 設定顯示 myAreaSpinner 和 myCitySpinner
@@ -102,7 +102,7 @@ class NowFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if (parent?.id == R.id.areaSpinner) {
+        if (parent?.id == R.id.area_spinner) {
             cityList = when (position) {
                 0 -> R.array.northern_array
                 1 -> R.array.central_array
