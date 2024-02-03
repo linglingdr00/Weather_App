@@ -6,7 +6,11 @@
     <string name="permission_require_title">需要位置權限</string>
     <string name="permission_request">此 App 需要位置權限，否則無法取得您的所在位置</string>
     <string name="permission_require">此 App 需要位置權限，否則無法取得您的所在位置，請至設定開啟</string>
-    <string name="permission_denied">位置權限被拒絕，無法使用定位功能</string>
-    <string name="permission_approved">位置權限已通過，可以使用定位功能</string>
+    <string name="permission_denied">位置權限被拒絕</string>
+    <string name="permission_approved">位置權限已通過</string>
     <string name="ok">OK</string>
+    <string name="error_message_1_no_permission">因沒有位置權限，無法定位您的所在位置</string>
+    <string name="error_message_2_country">此功能僅供台灣地區使用</string>
+    <string name="error_message_3_location">定位不到您的位置</string>
+    <string name="error_message_4_gps_and_network">您的手機未開啟 GPS 定位或網路，請至設定開啟</string>
 </resources>

@@ -15,8 +15,6 @@ import com.linglingdr00.weather.ui.now.NowAdapter
 import com.linglingdr00.weather.ui.now.NowItem
 import com.linglingdr00.weather.ui.now.NowViewModel.NowWeatherApiStatus
 
-/* @BindingAdapter 註解會通知 data binding */
-
 //初始化 ForecastAdapter
 @BindingAdapter("forecastData")
 fun bindForecastRecyclerView(recyclerView: RecyclerView, data: List<ForecastItem>?) {
@@ -55,7 +53,7 @@ fun bindLocationNowRecyclerView(recyclerView: RecyclerView, data: List<NowItem>?
 
 //根據 weatherCode 設定天氣圖片
 @BindingAdapter("forecastWeatherImg")
-fun setForecastWeatherImg(imgView: ImageView, weatherCode: String?) {
+fun bindForecastWeatherImg(imgView: ImageView, weatherCode: String?) {
     val imgRes: Int
     when (weatherCode) {
         "1", "24" -> {
@@ -93,7 +91,7 @@ fun setForecastWeatherImg(imgView: ImageView, weatherCode: String?) {
 }
 
 @BindingAdapter("nowWeatherImg")
-fun setNowWeatherImg(imgView: ImageView, weather: String?) {
+fun bindNowWeatherImg(imgView: ImageView, weather: String?) {
     val imgRes: Int
     if (weather != null) {
         if (weather.contains("晴")) {
@@ -135,7 +133,7 @@ fun setNowWeatherImg(imgView: ImageView, weather: String?) {
 
 //設定降雨機率文字
 @BindingAdapter("popText")
-fun setPopText(textView: TextView, weatherPop: String?) {
+fun bindPopText(textView: TextView, weatherPop: String?) {
     weatherPop.let {
         textView.text = "降雨機率: $weatherPop%"
     }
@@ -192,27 +190,16 @@ fun bindNowStatus(imageView: ImageView, status: NowWeatherApiStatus?) {
 @BindingAdapter("locationStatus")
 fun bindLocationStatus(imageView: ImageView, status: LocationStatus?) {
     when (status) {
-        LocationStatus.NO_PERMISSION -> {
-            // 將 state ImageView 設為可顯示
+        LocationStatus.LOCATION_LOADING -> {
             imageView.visibility = View.VISIBLE
-            // 設定 location off 圖示
-            imageView.setImageResource(R.drawable.ic_location_off)
-        }
-        LocationStatus.LOADING -> {
-            // 將 status ImageView 設為可顯示
-            imageView.visibility = View.VISIBLE
-            // 設定 loading animation
             imageView.setImageResource(R.drawable.loading_animation)
         }
-        LocationStatus.ERROR -> {
-            // 將 state ImageView 設為可顯示
-            imageView.visibility = View.VISIBLE
-            // 設定 connection error 圖示
-            imageView.setImageResource(R.drawable.ic_connection_error)
-        }
-        LocationStatus.DONE -> {
-            // 將 state ImageView 設定為不可顯示
+        LocationStatus.LOCATION_DONE -> {
             imageView.visibility = View.GONE
+        }
+        LocationStatus.LOCATION_ERROR -> {
+            imageView.visibility = View.VISIBLE
+            imageView.setImageResource(R.drawable.ic_location_off)
         }
         else -> {}
     }

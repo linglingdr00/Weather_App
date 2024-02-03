@@ -63,19 +63,19 @@ class ForecastViewModel() : ViewModel() {
                     Log.d(TAG, "status: ${_status.value}")
                 } else {
                     Log.d(TAG, "Error Code: ${response.code()}")
-                    //設定 ForecastWeatherApi 狀態為 ERROR
+                    // 設定 ForecastWeatherApi 狀態為 ERROR
                     _status.value = ForecastWeatherApiStatus.ERROR
                     Log.d(TAG, "status: ${_status.value}")
-                    //設 forecastItemList 為空 list
+                    // 設 forecastItemList 為空 list
                     _forecastItemList.value = listOf()
                 }
             }
 
             override fun onFailure(call: Call<ForecastData>, t: Throwable) {
-                //設定 WeatherApi 狀態為 ERROR
+                // 設定 WeatherApi 狀態為 ERROR
                 _status.value = ForecastWeatherApiStatus.ERROR
                 Log.d(TAG, "status: ${_status.value}")
-                //設 forecastItemList 為空 list
+                // 設 forecastItemList 為空 list
                 _forecastItemList.value = listOf()
                 Log.d(TAG, "Failure: ${t.message}")
             }
@@ -209,9 +209,9 @@ class ForecastViewModel() : ViewModel() {
 
     // 根據選擇的區域設定不同資料
     fun setAreaData(cityList: MutableList<String>) {
-        //新增一個空 List
+        // 新增一個空 List
         val dataList: MutableList<MutableMap<String, String>> = mutableListOf()
-        //跑需要加入空 list 的每個縣市
+        // 跑需要加入空 list 的每個縣市
         for (city in cityList) {
             val tempList = dataArrayList.filter {
                 it["location"].equals(city)

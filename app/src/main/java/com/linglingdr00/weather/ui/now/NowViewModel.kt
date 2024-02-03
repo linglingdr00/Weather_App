@@ -1,5 +1,6 @@
 package com.linglingdr00.weather.ui.now
 
+import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -95,6 +96,12 @@ class NowViewModel : ViewModel() {
             val townName = station.geoInfo.townName
             hashMap["townName"] = townName
 
+            val stationLatitude = station.geoInfo.coordinates[0].stationLatitude
+            hashMap["stationLatitude"] = stationLatitude.toString()
+
+            val stationLongitude = station.geoInfo.coordinates[0].stationLongitude
+            hashMap["stationLongitude"] = stationLongitude.toString()
+
             val weather = when (val tempWeather = station.weatherElement.weather) {
                 "-99" -> "資料異常"
                 else -> tempWeather
@@ -181,16 +188,40 @@ class NowViewModel : ViewModel() {
         Log.d(TAG, "_nowItem: ${_nowItemList.value}")
     }
 
-    fun getMyTownData(town: String): MutableList<NowItem> {
+    fun getMyTownData(location: Location): MutableList<NowItem> {
+
         //新增一個空 List
         val myList: MutableList<MutableMap<String, String>> = mutableListOf()
-        val dataList = dataArrayList.filter {
+        /*val dataList = dataArrayList.filter {
             it["townName"].equals(town)
+        }.toMutableList()*/
+
+
+        val lat = location.latitude
+        val lon = location.longitude
+        val myTown = getTownByLocation(lat, lon)
+        Log.d(TAG, "lat: $lat, lon: $lon")
+
+        Log.d(TAG, "dataList: $myTown")
+        myList += myTown
+
+        return transToNowItem(myList)
+    }
+
+
+    private fun getTownByLocation(latitude: Double, longitude: Double): MutableMap<String, String> {
+
+        Log.d(TAG, "latitude: $latitude, longitude: $longitude")
+        val tempList = dataArrayList
+
+        tempList.sortBy{
+            Math.abs(it["stationLatitude"]?.toDouble()!! - latitude) +
+                    Math.abs(it["stationLongitude"]?.toDouble()!! - longitude)
         }
 
-        myList += dataList[0]
-
-        val tempList = transToNowItem(myList)
-        return tempList
+        //Log.d(TAG, "result: $result")
+        //val myTown = tempList[0]
+        Log.d(TAG, "tempList: $tempList")
+        return tempList[0]
     }
 }
