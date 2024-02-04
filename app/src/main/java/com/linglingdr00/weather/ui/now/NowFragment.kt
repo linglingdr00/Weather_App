@@ -129,10 +129,10 @@ class NowFragment : Fragment(), AdapterView.OnItemSelectedListener {
             val city = selectedCityList[position]
             Log.d(TAG, "position: $position, city: $city")
 
-            // 當資料處理完成時
+            // 觀察 NowWeatherApiStatus
             nowViewModel.status.observe(viewLifecycleOwner) {
+                // 當資料處理完成時，設定顯示 city 資料
                 if (it == NowViewModel.NowWeatherApiStatus.DONE) {
-                    // 設定顯示 city 資料
                     Log.d(TAG, "setCityData()")
                     nowViewModel.setCityData(city)
                 }

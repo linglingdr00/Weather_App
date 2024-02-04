@@ -2,6 +2,7 @@ package com.linglingdr00.weather
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -139,24 +140,26 @@ fun bindPopText(textView: TextView, weatherPop: String?) {
     }
 }
 
+@BindingAdapter("errorMessage")
+fun bindErrorMessage(textView: TextView, messageId: Int?) {
+    if (messageId != null) {
+        textView.setText(messageId)
+    }
+}
+
 /* 設定 forecast weather api status 以顯示 loading 和 error status 的 icon */
 @BindingAdapter("forecastWeatherApiStatus")
 fun bindForecastStatus(imageView: ImageView, status: ForecastWeatherApiStatus?) {
     when (status) {
         ForecastWeatherApiStatus.LOADING -> {
-            // 將 status ImageView 設為可顯示
-            imageView.visibility = View.VISIBLE
-            // 設定 loading animation
             imageView.setImageResource(R.drawable.loading_animation)
+            imageView.visibility = View.VISIBLE
         }
         ForecastWeatherApiStatus.ERROR -> {
-            // 將 state ImageView 設為可顯示
-            imageView.visibility = View.VISIBLE
-            // 設定 connection error 圖示
             imageView.setImageResource(R.drawable.ic_connection_error)
+            imageView.visibility = View.VISIBLE
         }
         ForecastWeatherApiStatus.DONE -> {
-            // 將 state ImageView 設定為不可顯示
             imageView.visibility = View.GONE
         }
         else -> {}
@@ -168,19 +171,14 @@ fun bindForecastStatus(imageView: ImageView, status: ForecastWeatherApiStatus?) 
 fun bindNowStatus(imageView: ImageView, status: NowWeatherApiStatus?) {
     when (status) {
         NowWeatherApiStatus.LOADING -> {
-            // 將 status ImageView 設為可顯示
-            imageView.visibility = View.VISIBLE
-            // 設定 loading animation
             imageView.setImageResource(R.drawable.loading_animation)
+            imageView.visibility = View.VISIBLE
         }
         NowWeatherApiStatus.ERROR -> {
-            // 將 state ImageView 設為可顯示
-            imageView.visibility = View.VISIBLE
-            // 設定 connection error 圖示
             imageView.setImageResource(R.drawable.ic_connection_error)
+            imageView.visibility = View.VISIBLE
         }
         NowWeatherApiStatus.DONE -> {
-            // 將 state ImageView 設定為不可顯示
             imageView.visibility = View.GONE
         }
         else -> {}
@@ -190,17 +188,29 @@ fun bindNowStatus(imageView: ImageView, status: NowWeatherApiStatus?) {
 @BindingAdapter("locationStatus")
 fun bindLocationStatus(imageView: ImageView, status: LocationStatus?) {
     when (status) {
-        LocationStatus.LOCATION_LOADING -> {
-            imageView.visibility = View.VISIBLE
+        LocationStatus.LOCATION_LOADING, LocationStatus.DATA_LOADING -> {
             imageView.setImageResource(R.drawable.loading_animation)
+            imageView.visibility = View.VISIBLE
         }
-        LocationStatus.LOCATION_DONE -> {
+        LocationStatus.LOCATION_ERROR, LocationStatus.DATA_ERROR -> {
+            imageView.setImageResource(R.drawable.ic_location_off)
+            imageView.visibility = View.VISIBLE
+        }
+        LocationStatus.LOCATION_DONE, LocationStatus.DATA_DONE -> {
             imageView.visibility = View.GONE
         }
-        LocationStatus.LOCATION_ERROR -> {
-            imageView.visibility = View.VISIBLE
-            imageView.setImageResource(R.drawable.ic_location_off)
-        }
         else -> {}
+    }
+}
+
+@BindingAdapter("linerLayuout")
+fun bindLinerLayuout(layout: LinearLayout, status: LocationStatus?) {
+    when (status) {
+        LocationStatus.DATA_DONE -> {
+            layout.visibility = View.VISIBLE
+        }
+        else -> {
+            layout.visibility = View.GONE
+        }
     }
 }

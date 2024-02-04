@@ -15,12 +15,12 @@ class LocationViewModel : ViewModel() {
     private val TAG = "LocationViewModel"
 
     // location LiveData
-    private val _location = MutableLiveData<Location>()
-    val location: LiveData<Location> = _location
+    private val _location = MutableLiveData<Location?>()
+    val location: LiveData<Location?> = _location
 
     // address LiveData
-    private val _address = MutableLiveData<List<Address>>()
-    val address: LiveData<List<Address>> = _address
+    private val _address = MutableLiveData<List<Address>?>()
+    val address: LiveData<List<Address>?> = _address
 
     // now item
     private val _nowItem = MutableLiveData<List<NowItem>>()
@@ -35,18 +35,18 @@ class LocationViewModel : ViewModel() {
     val permissionStatus: LiveData<Boolean> = _permissionStatus
 
     // location status
-    enum class LocationStatus { LOCATION_LOADING, LOCATION_DONE, LOCATION_ERROR }
+    enum class LocationStatus { LOCATION_LOADING, LOCATION_DONE, LOCATION_ERROR, DATA_LOADING, DATA_DONE, DATA_ERROR }
     private val _locationStatus = MutableLiveData<LocationStatus>()
     val locationStatus: LiveData<LocationStatus> = _locationStatus
-
-    // data status
-    enum class DataStatus { DATA_LOADING, DATA_DONE, DATA_ERROR }
-    private val _dataStatus = MutableLiveData<DataStatus>()
-    val dataStatus: LiveData<DataStatus> = _dataStatus
 
     // error message
     private val _errorMessage = MutableLiveData<Int>()
     val errorMessage: LiveData<Int> = _errorMessage
+
+    // nowItem status
+    private val nowItemStatus = MutableLiveData(false)
+    // forecastItem status
+    private val forecastItemStatus = MutableLiveData(false)
 
 
     // 設定 permission status
@@ -59,29 +59,32 @@ class LocationViewModel : ViewModel() {
         _locationStatus.value = status
     }
 
-    // 設定 data status
-    fun setDataStatus(status: DataStatus) {
-        _dataStatus.value = status
-    }
-
     // 設定 error message
     fun setErrorMessage(message: Int) {
         _errorMessage.value = message
     }
 
-    fun receiveLocation(location: Location, address: List<Address>) {
-        // 將 location 存入 LiveData
-        _location.value = location
-        Log.d(TAG, "location: $location")
+    fun receiveLocation(location: Location?, address: List<Address>?) {
 
-        // 將 address 存入 LiveData
-        _address.value = address
-        Log.d(TAG, "address: $address")
+        if (location != null && address != null) {
+            // 將 location 存入 LiveData
+            _location.value = location
+            Log.d(TAG, "location: $location")
 
-        val countryCode = address[0].countryCode
+            // 將 address 存入 LiveData
+            _address.value = address
+            Log.d(TAG, "address: $address")
 
-        // 確認目前所在國家
-        checkCountry(countryCode)
+            val countryCode = address[0].countryCode
+
+            // 確認目前所在國家
+            checkCountry(countryCode)
+        } else {
+            // 如果接收到的 location 或 address 為 null
+            _locationStatus.value = LocationStatus.LOCATION_ERROR
+            _errorMessage.value = R.string.error_message_3_location
+        }
+
     }
 
     fun receiveForecastItem(forecastItem: MutableList<ForecastItem>) {
@@ -103,7 +106,6 @@ class LocationViewModel : ViewModel() {
             // 如果所在國家非台灣，將 location 狀態設為 error
             _locationStatus.value = LocationStatus.LOCATION_ERROR
             _errorMessage.value = R.string.error_message_2_country
-            Log.d(TAG, "errorMessage: 此功能僅供台灣地區使用")
         }
     }
 

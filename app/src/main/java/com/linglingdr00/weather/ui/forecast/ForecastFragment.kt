@@ -109,10 +109,9 @@ class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val cityList = resources.getStringArray(cityResource).toList() as MutableList<String>
         Log.d(TAG, "position: $position, cityList: $cityList")
 
-        // 當資料處理完成時
         forecastViewModel.status.observe(viewLifecycleOwner) {
+            // 當資料處理完成時，設定顯示地區資料
             if (it == ForecastViewModel.ForecastWeatherApiStatus.DONE) {
-                // 設定顯示地區資料
                 Log.d(TAG, "setAreaData()")
                 forecastViewModel.setAreaData(cityList)
             }

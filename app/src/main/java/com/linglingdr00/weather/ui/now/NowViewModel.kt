@@ -35,7 +35,7 @@ class NowViewModel : ViewModel() {
         //getNowData()
     }
 
-    fun getNowData(station: String? = null) {
+    fun getNowData() {
 
         //設定 NowWeatherApi 狀態為 LOADING
         _status.value = NowWeatherApiStatus.LOADING
@@ -70,6 +70,11 @@ class NowViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<NowData>, t: Throwable) {
+                //設定 NowWeatherApi 狀態為 ERROR
+                _status.value = NowWeatherApiStatus.ERROR
+                Log.d(TAG, "status: ${_status.value}")
+                //設 NowItemList 為空 list
+                _nowItemList.value = listOf()
                 Log.d(TAG, "Failure: ${t.message}")
             }
 

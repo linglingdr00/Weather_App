@@ -36,7 +36,7 @@ class ForecastViewModel() : ViewModel() {
         //getForecastData()
     }
 
-    fun getForecastData(city: String? = null) {
+    fun getForecastData() {
 
         //設定 ForecastWeatherApi 狀態為 LOADING
         _status.value = ForecastWeatherApiStatus.LOADING

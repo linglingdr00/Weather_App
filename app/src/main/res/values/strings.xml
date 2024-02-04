@@ -13,4 +13,5 @@
     <string name="error_message_2_country">此功能僅供台灣地區使用</string>
     <string name="error_message_3_location">定位不到您的位置</string>
     <string name="error_message_4_gps_and_network">您的手機未開啟 GPS 定位或網路，請至設定開啟</string>
+    <string name="error_message_5_data">資料抓取時發生錯誤</string>
 </resources>

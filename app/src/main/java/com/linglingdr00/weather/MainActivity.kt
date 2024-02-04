@@ -66,14 +66,14 @@ class MainActivity : AppCompatActivity() {
         when {
             // 當已取得權限時
             ContextCompat.checkSelfPermission(
-                this@MainActivity, Manifest.permission.ACCESS_COARSE_LOCATION)
+                this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED -> {
                 Log.d(TAG, "checkLocationPermission(): 已取得位置權限")
                 permissionApproved()
             }
             // 當未取得權限，且拒絕次數小於2次時
             ActivityCompat.shouldShowRequestPermissionRationale(
-                this@MainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) -> {
+                this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION) -> {
                 Log.d(TAG, "checkLocationPermission(): 未取得位置權限")
 
                 // 告知需要權限的原因
@@ -82,7 +82,9 @@ class MainActivity : AppCompatActivity() {
                     .setMessage(R.string.permission_request)
                     .setPositiveButton("OK") { _, _ ->
                         // 再次請求權限
-                        locationPermissionRequest.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+                        locationPermissionRequest.launch(
+                            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_FINE_LOCATION) )
                     }
                     .setNeutralButton("NO") { _, _ -> permissionDenied() }
                     .show()
@@ -90,24 +92,30 @@ class MainActivity : AppCompatActivity() {
             // 當第一次詢問時
             else -> {
                 Log.d(TAG, "checkLocationPermission(): 直接請求位置權限")
-                locationPermissionRequest.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+                locationPermissionRequest.launch(
+                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION))
             }
         }
     }
 
     private val locationPermissionRequest = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()) { isGranted ->
+        //ActivityResultContracts.RequestPermission()) { isGranted ->
+        ActivityResultContracts.RequestMultiplePermissions()) { result ->
+        var isGrantAll = true
+        result.entries.forEach {
+            isGrantAll = isGrantAll and it.value
+            Log.d(TAG, "permission: $it")
+        }
         // 使用者同意給予權限
-        if (isGranted) {
+        if (isGrantAll) {
             permissionApproved()
         }
         // 使用者不同意給予權限
         else {
             // 拒絕次數超過2次時
             if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                    this@MainActivity, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-
-                //permissionDenied()
+                    this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 // 引導使用者到設定頁面的 Dialog
                 AlertDialog.Builder(this)

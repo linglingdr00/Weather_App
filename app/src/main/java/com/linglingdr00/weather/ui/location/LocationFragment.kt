@@ -34,12 +34,7 @@ class LocationFragment : Fragment() {
     private lateinit var currentLocationListener: CurrentLocationListener
 
     private var currentAddress: List<Address>? = null
-    private var currentLocatin: Location? = null
-
-    private var nowDataStatus: Boolean? = false
-    private var forecastDataStatus: Boolean? = false
-
-    private var locationText: String? = null
+    private var currentLocation: Location? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +42,9 @@ class LocationFragment : Fragment() {
 
         //新增 location listener
         currentLocationListener = CurrentLocationListener(requireContext()) { location, address ->
+
             //收到 location callback
-            Log.d(TAG, "location: $location, address: $address")
+            Log.d(TAG, "get location callback: location: ${location?.latitude} ${location?.longitude}, address: ${address?.get(0)?.getAddressLine(0)}")
             //將 location 傳給 view model
             locationViewModel.receiveLocation(location, address)
         }
@@ -98,12 +94,14 @@ class LocationFragment : Fragment() {
                 true -> {
                     // 檢查 GPS provider 和 network provider
                     if (checkGPSAndNetworkStatus()) {
-                        //currentLocationListener.startGetLocation()
-                        currentLocationListener.startToLocationUpdates()
+                        // 設定 location status LOCATION_LOADING
+                        locationViewModel.setLocationState(LocationViewModel.LocationStatus.LOCATION_LOADING)
+                        currentLocationListener.startGetLocation()
+                        //currentLocationListener.getLastLocation()
                     }
                 }
                 false -> {
-                    // 設定 location status error
+                    // 設定 location status LOCATION_ERROR
                     locationViewModel.setLocationState(LocationViewModel.LocationStatus.LOCATION_ERROR)
                     // 設定 error message
                     locationViewModel.setErrorMessage(R.string.error_message_1_no_permission)
@@ -114,88 +112,94 @@ class LocationFragment : Fragment() {
 
         locationViewModel.location.observe(viewLifecycleOwner) { location ->
             // 將得到的 locatin 存起來
-            currentLocatin = location
-            Log.d(TAG, "locatin: $currentLocatin")
+            currentLocation = location
+            Log.d(TAG, "locatin: ${currentLocation?.latitude} ${currentLocation?.longitude}")
         }
 
         locationViewModel.address.observe(viewLifecycleOwner) { address ->
             // 將得到的 address 存起來
             currentAddress = address
-            Log.d(TAG, "address: $address")
+            Log.d(TAG, "address: ${address?.get(0)?.getAddressLine(0)}")
         }
 
         locationViewModel.locationStatus.observe(viewLifecycleOwner) {
             when (it) {
                 LocationViewModel.LocationStatus.LOCATION_LOADING -> {
-                    Log.d(TAG, "LocationStatus: LOCATION_LOADING")
+                    Log.d(TAG, "LocationStatus 1: LOCATION_LOADING")
+                    // 不顯示 error message
                     binding?.errorMessageTextView?.visibility = View.GONE
                 }
                 LocationViewModel.LocationStatus.LOCATION_DONE -> {
-                    Log.d(TAG, "LocationStatus: LOCATION_DONE")
+                    Log.d(TAG, "LocationStatus 2: LOCATION_DONE")
+                    // 不顯示 error message
                     binding?.errorMessageTextView?.visibility = View.GONE
+                    // 設定 menu
+                    setHasOptionsMenu(true)
                     // 當得到 location 資料後，開始抓取 item data
-                    locationViewModel.setDataStatus(LocationViewModel.DataStatus.DATA_LOADING)
+                    locationViewModel.setLocationState(LocationViewModel.LocationStatus.DATA_LOADING)
+                }
+                LocationViewModel.LocationStatus.LOCATION_ERROR -> {
+                    Log.d(TAG, "LocationStatus 3: LOCATION_ERROR")
+                    // 顯示 error message
+                    binding?.errorMessageTextView?.visibility = View.VISIBLE
+                }
+                LocationViewModel.LocationStatus.DATA_LOADING -> {
+                    Log.d(TAG, "LocationStatus 4: DATA_LOADING")
+                    // 不顯示 error message
+                    binding?.errorMessageTextView?.visibility = View.GONE
 
                     nowViewModel.status.observe(viewLifecycleOwner) {
-                        val city = currentAddress?.get(0)?.adminArea
-                        Log.d(TAG, "locatin: $currentLocatin, city: $city")
 
                         if (it == NowViewModel.NowWeatherApiStatus.DONE) {
-                            // 當 now item 的資料抓完後，設 now data status 為 true
-                            nowDataStatus = true
-                            val nowItem = nowViewModel.getMyTownData(currentLocatin!!)
-                            locationViewModel.receiveNowItem(nowItem)
-                        } else {
-                            nowDataStatus = false
+                            try {
+                                val nowItem = nowViewModel.getMyTownData(currentLocation!!)
+                                locationViewModel.receiveNowItem(nowItem)
+                                // 得到 now item 後，設 LocationStatus 為 DATA_DONE
+                                locationViewModel.setLocationState(LocationViewModel.LocationStatus.DATA_DONE)
+                            } catch (e: Exception) {
+                                Log.d(TAG, "now item error: ${e.message}")
+                                // 當 now item 和 forecast item 其中一個發生錯誤時，設 LocationStatus 為 DATA_ERROR
+                                locationViewModel.setLocationState(LocationViewModel.LocationStatus.DATA_ERROR)
+                                //設定 error message
+                                locationViewModel.setErrorMessage(R.string.error_message_5_data)
+                            }
                         }
                     }
 
                     forecastViewModel.status.observe(viewLifecycleOwner) {
                         val city = currentAddress?.get(0)?.adminArea
-                        Log.d(TAG, "locatin: $currentLocatin, city: $city")
+                        //Log.d(TAG, "city: $city")
 
                         if (it==ForecastViewModel.ForecastWeatherApiStatus.DONE) {
-                            // 當 forecast item 的資料抓完後，設 forecast data status 為 true
-                            forecastDataStatus = true
-                            val forecastItem = forecastViewModel.getMyCityData(city!!)
-                            locationViewModel.receiveForecastItem(forecastItem)
-                        } else {
-                            forecastDataStatus = false
+                            try {
+                                val forecastItem = forecastViewModel.getMyCityData(city!!)
+                                locationViewModel.receiveForecastItem(forecastItem)
+                                // 得到 forecast item 後，設 LocationStatus 為 DATA_DONE
+                                locationViewModel.setLocationState(LocationViewModel.LocationStatus.DATA_DONE)
+
+                            } catch (e: Exception) {
+                                Log.d(TAG, "forecast item error: ${e.message}")
+                                // 當 now item 和 forecast item 其中一個發生錯誤時，設 LocationStatus 為 DATA_ERROR
+                                locationViewModel.setLocationState(LocationViewModel.LocationStatus.DATA_ERROR)
+                                //設定 error message
+                                locationViewModel.setErrorMessage(R.string.error_message_5_data)
+                            }
                         }
                     }
-
-                    if (nowDataStatus == true && forecastDataStatus == true) {
-                        locationViewModel.setDataStatus(LocationViewModel.DataStatus.DATA_DONE)
-                    }
                 }
-                LocationViewModel.LocationStatus.LOCATION_ERROR -> {
-                    Log.d(TAG, "LocationStatus: LOCATION_ERROR")
-
-                    locationViewModel.errorMessage.observe(viewLifecycleOwner) {
-                        binding?.errorMessageTextView?.setText(it)
-                        binding?.errorMessageTextView?.visibility = View.VISIBLE
-                    }
-
+                LocationViewModel.LocationStatus.DATA_DONE -> {
+                    Log.d(TAG, "LocationStatus 5: DATA_DONE")
+                    // 不顯示 error message
+                    binding?.errorMessageTextView?.visibility = View.GONE
+                }
+                LocationViewModel.LocationStatus.DATA_ERROR -> {
+                    Log.d(TAG, "LocationStatus 6: DATA_ERROR")
+                    // 顯示 error message
+                    binding?.errorMessageTextView?.visibility = View.VISIBLE
                 }
 
             }
         }
-
-        locationViewModel.dataStatus.observe(viewLifecycleOwner) {
-            when (it) {
-                LocationViewModel.DataStatus.DATA_DONE -> {
-                    // 顯示 liner layout
-                    binding?.linerLayout?.visibility = View.VISIBLE
-                    // 設定 menu
-                    setHasOptionsMenu(true)
-                } else -> {
-                    // 不顯示 liner layout
-                    binding?.linerLayout?.visibility = View.GONE
-                }
-            }
-        }
-
-
     }
 
     // 設定 menu
@@ -247,8 +251,8 @@ class LocationFragment : Fragment() {
     private fun isConnected(): Boolean {
         val connectivityManager: ConnectivityManager? = context?.getSystemService(AppCompatActivity.CONNECTIVITY_SERVICE) as ConnectivityManager?
         val networkInfo = connectivityManager!!.activeNetworkInfo
-
-        return networkInfo != null && networkInfo.isConnected()
+        // 如果 networkInfo != null 會 return true，反之 return false
+        return networkInfo != null
     }
 
     override fun onDestroyView() {
