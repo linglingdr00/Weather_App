@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.linglingdr00.weather.ui.forecast.ForecastAdapter
 import com.linglingdr00.weather.ui.forecast.ForecastItem
 import com.linglingdr00.weather.ui.forecast.ForecastViewModel.ForecastWeatherApiStatus
-import com.linglingdr00.weather.ui.location.LocationForecastAdapter
-import com.linglingdr00.weather.ui.location.LocationNowAdapter
+import com.linglingdr00.weather.ui.location.LocationAdapter
+import com.linglingdr00.weather.ui.location.LocationItem
 import com.linglingdr00.weather.ui.location.LocationViewModel.LocationStatus
 import com.linglingdr00.weather.ui.now.NowAdapter
 import com.linglingdr00.weather.ui.now.NowItem
@@ -34,22 +34,16 @@ fun bindNowRecyclerView(recyclerView: RecyclerView, data: List<NowItem>?) {
     adapter.submitList(data)
 }
 
-//初始化 LocationForecastAdapter
-@BindingAdapter("locationForecastData")
-fun bindLocationForecastRecyclerView(recyclerView: RecyclerView, data: List<ForecastItem>?) {
-    // 將 recyclerView.adapter 做為 LocationForecastAdapter 並指派給新的 val 屬性 adapter
-    val adapter = recyclerView.adapter as LocationForecastAdapter
-    // 呼叫 adapter.submitList() 可查看 ForecastItem list data (出現新的 list 時，這個屬性會通知 RecyclerView)
-    adapter.submitList(data)
-}
+//初始化 LocationAdapter
+@BindingAdapter("locationData")
+fun bindLocationRecyclerView(recyclerView: RecyclerView, data: List<LocationItem>?) {
+    val adapter = recyclerView.adapter as LocationAdapter
 
-//初始化 NowForecastAdapter
-@BindingAdapter("locationNowData")
-fun bindLocationNowRecyclerView(recyclerView: RecyclerView, data: List<NowItem>?) {
-    // 將 recyclerView.adapter 做為 LocationNowAdapter 並指派給新的 val 屬性 adapter
-    val adapter = recyclerView.adapter as LocationNowAdapter
-    // 呼叫 adapter.submitList() 可查看 NowItem list data (出現新的 list 時，這個屬性會通知 RecyclerView)
-    adapter.submitList(data)
+    if (data!=null) {
+        adapter.setLocationItem(data)
+        adapter.notifyDataSetChanged()
+    }
+
 }
 
 //根據 weatherCode 設定天氣圖片

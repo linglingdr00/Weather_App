@@ -23,12 +23,24 @@ class LocationViewModel : ViewModel() {
     val address: LiveData<List<Address>?> = _address
 
     // now item
-    private val _nowItem = MutableLiveData<List<NowItem>>()
-    val nowItem: LiveData<List<NowItem>> = _nowItem
+    private val _nowItem = MutableLiveData<NowItem>()
+    val nowItem: LiveData<NowItem> = _nowItem
 
     // forecast item
-    private val _forecastItem = MutableLiveData<List<ForecastItem>>()
-    val forecastItem: LiveData<List<ForecastItem>> = _forecastItem
+    private val _forecastItem = MutableLiveData<ForecastItem>()
+    val forecastItem: LiveData<ForecastItem> = _forecastItem
+
+    // location item
+    private val _locationItemList = MutableLiveData<List<LocationItem>>()
+    val locationItemList: LiveData<List<LocationItem>> = _locationItemList
+
+    // now item status
+    private val _nowItemStatus = MutableLiveData<Boolean>()
+    val nowItemStatus: MutableLiveData<Boolean> = _nowItemStatus
+
+    // forecast item status
+    private val _forecastItemStatus = MutableLiveData<Boolean>()
+    val forecastItemStatus: MutableLiveData<Boolean> = _forecastItemStatus
 
     // permission status
     private val _permissionStatus = MutableLiveData<Boolean>()
@@ -43,10 +55,12 @@ class LocationViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<Int>()
     val errorMessage: LiveData<Int> = _errorMessage
 
-    // nowItem status
-    private val nowItemStatus = MutableLiveData(false)
-    // forecastItem status
-    private val forecastItemStatus = MutableLiveData(false)
+    private var data: List<LocationItem>? = null
+
+    init {
+        _nowItemStatus.value = false
+        _forecastItemStatus.value = false
+    }
 
 
     // 設定 permission status
@@ -87,14 +101,19 @@ class LocationViewModel : ViewModel() {
 
     }
 
-    fun receiveForecastItem(forecastItem: MutableList<ForecastItem>) {
-        _forecastItem.value = forecastItem
-        Log.d(TAG, "forecastItem: ${_forecastItem.value}")
+    fun setForecastItemStatus(status: Boolean) {
+        _forecastItemStatus.value = status
     }
 
-    fun receiveNowItem(nowItem: MutableList<NowItem>) {
-        _nowItem.value = nowItem
-        Log.d(TAG, "nowItem: ${_nowItem.value}")
+    fun setNowItemStatus(status: Boolean) {
+        _nowItemStatus.value = status
+    }
+
+    fun tranToLocationItem(nowItem: NowItem, forecastItem: ForecastItem) {
+        _locationItemList.value = listOf(
+            LocationItem(nowItem),
+            LocationItem(forecastItem)
+        )
     }
 
     private fun checkCountry(countryCode: String) {

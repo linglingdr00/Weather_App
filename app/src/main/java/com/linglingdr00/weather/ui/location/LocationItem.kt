@@ -1,9 +1,6 @@
 package com.linglingdr00.weather.ui.location
 
-import com.linglingdr00.weather.ui.forecast.ForecastItem
-import com.linglingdr00.weather.ui.now.NowItem
-
 data class LocationItem(
-    val nowItem: NowItem,
-    val forecastItem: ForecastItem
+    // 將 type 定義為 Any，可存放不同 type 的 item
+    val item: Any
 )

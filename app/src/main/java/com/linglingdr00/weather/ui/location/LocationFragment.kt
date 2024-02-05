@@ -19,7 +19,9 @@ import com.linglingdr00.weather.CurrentLocationListener
 import com.linglingdr00.weather.ItemDecoration
 import com.linglingdr00.weather.R
 import com.linglingdr00.weather.databinding.FragmentLocationBinding
+import com.linglingdr00.weather.ui.forecast.ForecastItem
 import com.linglingdr00.weather.ui.forecast.ForecastViewModel
+import com.linglingdr00.weather.ui.now.NowItem
 import com.linglingdr00.weather.ui.now.NowViewModel
 
 
@@ -35,6 +37,9 @@ class LocationFragment : Fragment() {
 
     private var currentAddress: List<Address>? = null
     private var currentLocation: Location? = null
+
+    private var nowItem: NowItem? = null
+    private var forecastItem: ForecastItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,14 +78,9 @@ class LocationFragment : Fragment() {
         binding?.viewModel = locationViewModel
 
         // 設 adapter 為 LocationNowAdapter
-        binding?.locationNowRecyclerView?.adapter = LocationNowAdapter()
+        binding?.locationRecyclerView?.adapter = LocationAdapter()
         // 設定 ItemDecoration 調整 item 邊距
-        binding?.locationNowRecyclerView?.addItemDecoration(ItemDecoration())
-
-        // 設 adapter 為 LocationForecastAdapter
-        binding?.locationForecastRecyclerView?.adapter = LocationForecastAdapter()
-        // 設定 ItemDecoration 調整 item 邊距
-        binding?.locationForecastRecyclerView?.addItemDecoration(ItemDecoration())
+        binding?.locationRecyclerView?.addItemDecoration(ItemDecoration())
     }
 
     override fun onResume() {
@@ -152,13 +152,14 @@ class LocationFragment : Fragment() {
 
                         if (it == NowViewModel.NowWeatherApiStatus.DONE) {
                             try {
-                                val nowItem = nowViewModel.getMyTownData(currentLocation!!)
-                                locationViewModel.receiveNowItem(nowItem)
+                                val nowItemList = nowViewModel.getMyTownData(currentLocation!!)
+                                nowItem = nowItemList[0]
+                                locationViewModel.setNowItemStatus(true)
                                 // 得到 now item 後，設 LocationStatus 為 DATA_DONE
-                                locationViewModel.setLocationState(LocationViewModel.LocationStatus.DATA_DONE)
+                                //locationViewModel.setLocationState(LocationViewModel.LocationStatus.DATA_DONE)
                             } catch (e: Exception) {
                                 Log.d(TAG, "now item error: ${e.message}")
-                                // 當 now item 和 forecast item 其中一個發生錯誤時，設 LocationStatus 為 DATA_ERROR
+                                // 當 now item 發生錯誤時，設 LocationStatus 為 DATA_ERROR
                                 locationViewModel.setLocationState(LocationViewModel.LocationStatus.DATA_ERROR)
                                 //設定 error message
                                 locationViewModel.setErrorMessage(R.string.error_message_5_data)
@@ -170,22 +171,35 @@ class LocationFragment : Fragment() {
                         val city = currentAddress?.get(0)?.adminArea
                         //Log.d(TAG, "city: $city")
 
-                        if (it==ForecastViewModel.ForecastWeatherApiStatus.DONE) {
+                        if (it == ForecastViewModel.ForecastWeatherApiStatus.DONE) {
                             try {
-                                val forecastItem = forecastViewModel.getMyCityData(city!!)
-                                locationViewModel.receiveForecastItem(forecastItem)
+                                val forecastItemList = forecastViewModel.getMyCityData(city!!)
+                                forecastItem = forecastItemList[0]
+                                locationViewModel.setForecastItemStatus(true)
                                 // 得到 forecast item 後，設 LocationStatus 為 DATA_DONE
-                                locationViewModel.setLocationState(LocationViewModel.LocationStatus.DATA_DONE)
+                                //locationViewModel.setLocationState(LocationViewModel.LocationStatus.DATA_DONE)
 
                             } catch (e: Exception) {
                                 Log.d(TAG, "forecast item error: ${e.message}")
-                                // 當 now item 和 forecast item 其中一個發生錯誤時，設 LocationStatus 為 DATA_ERROR
+                                // 當 forecast item 發生錯誤時，設 LocationStatus 為 DATA_ERROR
                                 locationViewModel.setLocationState(LocationViewModel.LocationStatus.DATA_ERROR)
                                 //設定 error message
                                 locationViewModel.setErrorMessage(R.string.error_message_5_data)
                             }
                         }
                     }
+
+                    // 接收到 nowItem 和 forecastItem 後，轉成 locationItem
+                    locationViewModel.forecastItemStatus.observe(viewLifecycleOwner) { forecastItemStatus ->
+                        locationViewModel.nowItemStatus.observe(viewLifecycleOwner) { nowItemStatus ->
+                            if (forecastItemStatus && nowItemStatus) {
+                                locationViewModel.tranToLocationItem(nowItem!!, forecastItem!!)
+                                // 設 LocationStatus 為 DATA_DONE
+                                locationViewModel.setLocationState(LocationViewModel.LocationStatus.DATA_DONE)
+                            }
+                        }
+                    }
+
                 }
                 LocationViewModel.LocationStatus.DATA_DONE -> {
                     Log.d(TAG, "LocationStatus 5: DATA_DONE")
