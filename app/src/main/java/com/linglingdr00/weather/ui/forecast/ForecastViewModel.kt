@@ -229,9 +229,11 @@ class ForecastViewModel() : ViewModel() {
 
     fun getMyCityData(city: String): MutableList<ForecastItem> {
 
-        val myCity = when(city) {
-            "台北市" -> "臺北市"
-            else -> city
+        // 把 "台" 替換成 "臺"
+        val myCity = if (city.contains("台")) {
+            city.replace("台", "臺")
+        } else {
+            city
         }
 
         val tempList = dataArrayList.filter {
