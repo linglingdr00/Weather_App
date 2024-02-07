@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.linglingdr00.weather.network.ForecastData
+import com.linglingdr00.weather.data.ForecastData
+import com.linglingdr00.weather.data.ForecastItem
 import com.linglingdr00.weather.network.WeatherApi
 import retrofit2.Call
 import retrofit2.Callback

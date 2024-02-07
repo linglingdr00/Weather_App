@@ -1,5 +1,7 @@
 package com.linglingdr00.weather.network
 
+import com.linglingdr00.weather.data.ForecastData
+import com.linglingdr00.weather.data.NowData
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Call

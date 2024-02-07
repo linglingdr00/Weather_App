@@ -1,4 +1,4 @@
-package com.linglingdr00.weather.ui.forecast
+package com.linglingdr00.weather.data
 
 data class ForecastItem(
     val locationText: String,

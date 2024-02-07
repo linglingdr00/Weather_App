@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Weather</string>
+    <string name="app_name">天氣：威特</string>
     <string name="title_forecast">天氣預報</string>
     <string name="title_location">目前位置</string>
     <string name="title_now">現在天氣</string>

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="forecastItem"
-            type="com.linglingdr00.weather.ui.forecast.ForecastItem" />
+            type="com.linglingdr00.weather.data.ForecastItem" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

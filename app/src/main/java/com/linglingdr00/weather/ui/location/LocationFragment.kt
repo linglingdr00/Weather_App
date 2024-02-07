@@ -18,10 +18,10 @@ import androidx.fragment.app.activityViewModels
 import com.linglingdr00.weather.CurrentLocationListener
 import com.linglingdr00.weather.ItemDecoration
 import com.linglingdr00.weather.R
+import com.linglingdr00.weather.data.ForecastItem
+import com.linglingdr00.weather.data.NowItem
 import com.linglingdr00.weather.databinding.FragmentLocationBinding
-import com.linglingdr00.weather.ui.forecast.ForecastItem
 import com.linglingdr00.weather.ui.forecast.ForecastViewModel
-import com.linglingdr00.weather.ui.now.NowItem
 import com.linglingdr00.weather.ui.now.NowViewModel
 
 
@@ -47,7 +47,6 @@ class LocationFragment : Fragment() {
 
         //新增 location listener
         currentLocationListener = CurrentLocationListener(requireContext()) { location, address ->
-
             //收到 location callback
             Log.d(TAG, "get location callback: location: ${location?.latitude} ${location?.longitude}, address: ${address?.get(0)?.getAddressLine(0)}")
             //將 location 傳給 view model
@@ -89,6 +88,9 @@ class LocationFragment : Fragment() {
         // 設定 toolbar title
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.title_location)
 
+        // 設 item 狀態為 false
+        locationViewModel.initItemStatus()
+
         locationViewModel.permissionStatus.observe(viewLifecycleOwner) { permission ->
             when (permission) {
                 true -> {
@@ -96,8 +98,7 @@ class LocationFragment : Fragment() {
                     if (checkGPSAndNetworkStatus()) {
                         // 設定 location status LOCATION_LOADING
                         locationViewModel.setLocationState(LocationViewModel.LocationStatus.LOCATION_LOADING)
-                        currentLocationListener.startGetLocation()
-                        //currentLocationListener.getLastLocation()
+                        currentLocationListener.getLastLocation()
                     }
                 }
                 false -> {
@@ -192,6 +193,7 @@ class LocationFragment : Fragment() {
                     // 接收到 nowItem 和 forecastItem 後，轉成 locationItem
                     locationViewModel.forecastItemStatus.observe(viewLifecycleOwner) { forecastItemStatus ->
                         locationViewModel.nowItemStatus.observe(viewLifecycleOwner) { nowItemStatus ->
+                            Log.d(TAG, "forecastItemStatus: $forecastItemStatus, nowItemStatus: $nowItemStatus")
                             if (forecastItemStatus && nowItemStatus) {
                                 locationViewModel.tranToLocationItem(nowItem!!, forecastItem!!)
                                 // 設 LocationStatus 為 DATA_DONE
@@ -214,6 +216,11 @@ class LocationFragment : Fragment() {
 
             }
         }
+    }
+
+    override fun onPause() {
+        Log.d(TAG, "onPause()")
+        super.onPause()
     }
 
     // 設定 menu

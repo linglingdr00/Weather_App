@@ -1,4 +1,4 @@
-package com.linglingdr00.weather.ui.now
+package com.linglingdr00.weather.data
 
 data class NowItem(
     val stationName: String,

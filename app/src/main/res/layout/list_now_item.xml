@@ -6,7 +6,7 @@
     <data>
         <variable
             name="nowItem"
-            type="com.linglingdr00.weather.ui.now.NowItem" />
+            type="com.linglingdr00.weather.data.NowItem" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

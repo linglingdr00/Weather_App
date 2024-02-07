@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Handler
 import android.os.Looper
@@ -39,9 +40,10 @@ class CurrentLocationListener(private val context: Context, private val callback
     private lateinit var locationCallback: LocationCallback
 
 
-    private val timeout = 10
+    private val timeout = 5
     private val handler: Handler = Handler(Looper.getMainLooper())
     private var counts = 0
+    private var mode = 0
 
     private val requestWithTimeout: Runnable = object: Runnable {
         override fun run() {
@@ -50,8 +52,14 @@ class CurrentLocationListener(private val context: Context, private val callback
             // 如果時間超過 timeout 就停止更新位置
             if (counts > timeout) {
                 Log.d(TAG, "timeout")
-                stopToLocationUpdates()
-                callback.invoke(currentLocation, currentAddress)
+                if (mode == 0) {
+                    stopGMSLocationRequest()
+                    mode = 1
+                    initGetRequest()
+                } else {
+                    stopLocationRequest()
+                    callback.invoke(currentLocation, currentAddress)
+                }
             } else {
                 // 還沒超過 timeout 就繼續計算時間
                 handler.postDelayed(this, 1000)
@@ -59,9 +67,12 @@ class CurrentLocationListener(private val context: Context, private val callback
         }
     }
 
-    fun initGetLocation() {
+    private fun initGetRequest() {
         // 開始更新位置
-        startToLocationUpdates()
+        when (mode) {
+            0 -> startGMSLocationRequest()
+            else -> startLocationRequest()
+        }
         counts = 0
         handler.postDelayed(requestWithTimeout, 1000)
     }
@@ -87,6 +98,7 @@ class CurrentLocationListener(private val context: Context, private val callback
     }
 
     fun createLocationRequest() {
+        Log.d(TAG, "createLocationRequest()")
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
         locationRequest = LocationRequest.create().apply {
@@ -103,7 +115,7 @@ class CurrentLocationListener(private val context: Context, private val callback
                 val location = locationResult.lastLocation
                 Log.d(TAG, "gms location: $location")
                 //停止
-                stopToLocationUpdates()
+                stopGMSLocationRequest()
                 tranToAddress(location)
 
             }
@@ -112,6 +124,7 @@ class CurrentLocationListener(private val context: Context, private val callback
 
     // 2. gms last location 定位
     fun getGMSLastLocation() {
+        Log.d(TAG, "getGMSLastLocation()")
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -129,14 +142,14 @@ class CurrentLocationListener(private val context: Context, private val callback
                     tranToAddress(location)
                 } else {
                     // 用 gms location 定位
-                    initGetLocation()
+                    initGetRequest()
                 }
             }
     }
 
     // 用 gms location 定位
-    private fun startToLocationUpdates() {
-        Log.d(TAG, "startToLocationUpdates()")
+    private fun startGMSLocationRequest() {
+        Log.d(TAG, "startGMSLocationRequest()")
 
         try {
             fusedLocationProviderClient.requestLocationUpdates(
@@ -146,8 +159,8 @@ class CurrentLocationListener(private val context: Context, private val callback
         }
     }
 
-    fun stopToLocationUpdates() {
-        Log.d(TAG, "stopToLocationUpdates()")
+    fun stopGMSLocationRequest() {
+        Log.d(TAG, "stopGMSLocationRequest()")
 
         try {
             val removeTask = fusedLocationProviderClient.removeLocationUpdates(locationCallback)
@@ -163,24 +176,9 @@ class CurrentLocationListener(private val context: Context, private val callback
         }
     }
 
-
-    /*private var locationListener: LocationListener = object: LocationListener {
-
-        override fun onLocationChanged(location: Location) {
-            Log.d(TAG, "location: $location")
-            stopGetLocation()
-            tranToAddress(location)
-        }
-
-        override fun onProviderDisabled(provider: String) {
-        }
-
-        override fun onProviderEnabled(provider: String) {
-        }
-    }*/
-
     // 1. 一般 last location 定位
-    fun startGetLocation() {
+    fun getLastLocation() {
+        Log.d(TAG, "getLastLocation()")
         // 使用 requestLocationUpdates 開始更新經緯度
         if (ActivityCompat.checkSelfPermission(
                 context,
@@ -212,9 +210,39 @@ class CurrentLocationListener(private val context: Context, private val callback
 
     }
 
-    /*private fun stopGetLocation() {
-        // 移除 locationListener
+    private var locationListener: LocationListener = object: LocationListener {
+
+        override fun onLocationChanged(location: Location) {
+            Log.d(TAG, "location: $location")
+            stopLocationRequest()
+            tranToAddress(location)
+        }
+
+        override fun onProviderDisabled(provider: String) {
+        }
+
+        override fun onProviderEnabled(provider: String) {
+        }
+    }
+
+    private fun startLocationRequest() {
+        Log.d(TAG, "startLocationRequest()")
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        locationManager?.requestLocationUpdates(gpsProvider,0L,0F,locationListener)
+    }
+
+    private fun stopLocationRequest() {
+        Log.d(TAG, "stopLocationRequest()")
         locationManager?.removeUpdates(locationListener)
-    }*/
+    }
 
 }

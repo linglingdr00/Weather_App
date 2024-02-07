@@ -17,7 +17,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
 import com.linglingdr00.weather.databinding.ActivityMainBinding
 import com.linglingdr00.weather.ui.forecast.ForecastViewModel
 import com.linglingdr00.weather.ui.location.LocationViewModel
@@ -149,13 +148,13 @@ class MainActivity : AppCompatActivity() {
     private fun permissionApproved() {
         // 設定 permission status，並傳給 view model
         locationViewModel.setPermissionStatus(true)
-        Snackbar.make(binding.container, R.string.permission_approved, Snackbar.LENGTH_LONG).show()
+        //Snackbar.make(binding.container, R.string.permission_approved, Snackbar.LENGTH_LONG).show()
     }
 
     private fun permissionDenied() {
         // 設定 permission status，並傳給 view model
         locationViewModel.setPermissionStatus(false)
-        Snackbar.make(binding.container, R.string.permission_denied, Snackbar.LENGTH_LONG).show()
+        //Snackbar.make(binding.container, R.string.permission_denied, Snackbar.LENGTH_LONG).show()
     }
 
     private fun preLoadData() {

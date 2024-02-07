@@ -7,13 +7,13 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.linglingdr00.weather.ui.forecast.ForecastAdapter
-import com.linglingdr00.weather.ui.forecast.ForecastItem
+import com.linglingdr00.weather.data.ForecastItem
 import com.linglingdr00.weather.ui.forecast.ForecastViewModel.ForecastWeatherApiStatus
 import com.linglingdr00.weather.ui.location.LocationAdapter
-import com.linglingdr00.weather.ui.location.LocationItem
+import com.linglingdr00.weather.data.LocationItem
 import com.linglingdr00.weather.ui.location.LocationViewModel.LocationStatus
 import com.linglingdr00.weather.ui.now.NowAdapter
-import com.linglingdr00.weather.ui.now.NowItem
+import com.linglingdr00.weather.data.NowItem
 import com.linglingdr00.weather.ui.now.NowViewModel.NowWeatherApiStatus
 
 //初始化 ForecastAdapter

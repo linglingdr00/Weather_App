@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.linglingdr00.weather.R
 import com.linglingdr00.weather.databinding.ListForecastItemBinding
 import com.linglingdr00.weather.databinding.ListNowItemBinding
-import com.linglingdr00.weather.ui.forecast.ForecastItem
-import com.linglingdr00.weather.ui.now.NowItem
+import com.linglingdr00.weather.data.ForecastItem
+import com.linglingdr00.weather.data.LocationItem
+import com.linglingdr00.weather.data.NowItem
 
 class LocationAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

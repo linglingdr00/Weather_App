@@ -7,8 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.linglingdr00.weather.R
-import com.linglingdr00.weather.ui.forecast.ForecastItem
-import com.linglingdr00.weather.ui.now.NowItem
+import com.linglingdr00.weather.data.ForecastItem
+import com.linglingdr00.weather.data.LocationItem
+import com.linglingdr00.weather.data.NowItem
 
 class LocationViewModel : ViewModel() {
 
@@ -55,13 +56,11 @@ class LocationViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<Int>()
     val errorMessage: LiveData<Int> = _errorMessage
 
-    private var data: List<LocationItem>? = null
-
-    init {
+    fun initItemStatus() {
         _nowItemStatus.value = false
         _forecastItemStatus.value = false
+        Log.d(TAG, "_nowItemStatus: ${_nowItemStatus.value}, _forecastItemStatus: ${_forecastItemStatus.value}")
     }
-
 
     // 設定 permission status
     fun setPermissionStatus(status: Boolean) {
