@@ -52,6 +52,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/townText"
                 android:layout_marginTop="10dp"
+                android:textColor="@color/gray"
                 android:text="現在天氣"/>
 
             <ImageView
@@ -85,6 +86,7 @@
                 app:layout_constraintTop_toTopOf="@id/weatherImg"
                 app:layout_constraintBottom_toTopOf="@id/rainText"
                 android:text="@{nowItem.uvText}"
+                android:textColor="@color/gray"
                 tools:text="紫外線指數: 10 UVI"/>
 
             <TextView
@@ -95,6 +97,7 @@
                 app:layout_constraintTop_toBottomOf="@id/uvText"
                 app:layout_constraintBottom_toBottomOf="@id/weatherImg"
                 android:text="@{nowItem.rainText}"
+                android:textColor="@color/gray"
                 tools:text="當日降水量: 100毫米"/>
 
             <View
@@ -114,6 +117,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/line1"
                 android:layout_marginTop="10dp"
+                android:textColor="@color/gray"
                 android:text="現在氣溫"/>
 
             <ImageView
@@ -147,6 +151,7 @@
                 app:layout_constraintTop_toTopOf="@id/temperatureImg"
                 app:layout_constraintBottom_toTopOf="@id/highTemText"
                 android:text="@{nowItem.lowTemText}"
+                android:textColor="@color/gray"
                 tools:text="紫外線指數: 10 UVI"/>
 
             <TextView
@@ -157,6 +162,7 @@
                 app:layout_constraintTop_toBottomOf="@id/lowTemText"
                 app:layout_constraintBottom_toBottomOf="@id/temperatureImg"
                 android:text="@{nowItem.highTemText}"
+                android:textColor="@color/gray"
                 tools:text="當日降水量: 100毫米"/>
 
             <View

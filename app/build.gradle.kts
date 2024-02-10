@@ -5,6 +5,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        create("release") {
+            storeFile = file("/Users/tinatang/Documents/app/weather/release/release.jks")
+            storePassword = "702424"
+            keyAlias = "weather"
+            keyPassword = "702424"
+        }
+    }
     namespace = "com.linglingdr00.weather"
     compileSdk = 33
 

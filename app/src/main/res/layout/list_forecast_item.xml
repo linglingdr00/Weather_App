@@ -41,6 +41,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/locationText"
                 android:layout_marginTop="10dp"
+                android:textColor="@color/gray"
                 android:text="@{forecastItem.timeText1}"
                 tools:text="今天 12:00 - 今天 18:00"/>
 
@@ -74,6 +75,7 @@
                 app:layout_constraintTop_toBottomOf="@id/weatherText1"
                 app:layout_constraintBottom_toBottomOf="@+id/weatherImg1"
                 android:textSize="12sp"
+                android:textColor="@color/gray"
                 app:popText="@{forecastItem.popText1}"
                 tools:text="降雨機率: 60%" />
 
@@ -105,6 +107,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/line1"
                 android:layout_marginTop="10dp"
+                android:textColor="@color/gray"
                 android:text="@{forecastItem.timeText2}"
                 tools:text="今天 18:00 - 明天 06:00"/>
 
@@ -138,6 +141,7 @@
                 app:layout_constraintTop_toBottomOf="@id/weatherText2"
                 app:layout_constraintBottom_toBottomOf="@+id/weatherImg2"
                 android:textSize="12sp"
+                android:textColor="@color/gray"
                 app:popText="@{forecastItem.popText2}"
                 tools:text="降雨機率: 60%" />
 
@@ -168,6 +172,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/line2"
                 android:layout_marginTop="10dp"
+                android:textColor="@color/gray"
                 android:text="@{forecastItem.timeText3}"
                 tools:text="明天 06:00 - 明天 18:00"/>
 
@@ -201,6 +206,7 @@
                 app:layout_constraintTop_toBottomOf="@id/weatherText3"
                 app:layout_constraintBottom_toBottomOf="@+id/weatherImg3"
                 android:textSize="12sp"
+                android:textColor="@color/gray"
                 app:popText="@{forecastItem.popText3}"
                 tools:text="降雨機率: 60%" />
 
