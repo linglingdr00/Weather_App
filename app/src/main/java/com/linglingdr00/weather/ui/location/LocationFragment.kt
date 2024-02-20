@@ -45,7 +45,7 @@ class LocationFragment : Fragment() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate()")
 
-        //新增 location listener
+        // 新增 location listener
         currentLocationListener = CurrentLocationListener(requireContext()) { location, address ->
             //收到 location callback
             Log.d(TAG, "get location callback: location: ${location?.latitude} ${location?.longitude}, address: ${address?.get(0)?.getAddressLine(0)}")
@@ -76,7 +76,7 @@ class LocationFragment : Fragment() {
         binding?.lifecycleOwner = this
         binding?.viewModel = locationViewModel
 
-        // 設 adapter 為 LocationNowAdapter
+        // 設 adapter 為 LocationAdapter
         binding?.locationRecyclerView?.adapter = LocationAdapter()
         // 設定 ItemDecoration 調整 item 邊距
         binding?.locationRecyclerView?.addItemDecoration(ItemDecoration())

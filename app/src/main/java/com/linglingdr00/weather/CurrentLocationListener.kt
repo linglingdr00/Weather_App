@@ -58,6 +58,7 @@ class CurrentLocationListener(private val context: Context, private val callback
                     initGetRequest()
                 } else {
                     stopLocationRequest()
+                    mode = 0
                     callback.invoke(currentLocation, currentAddress)
                 }
             } else {
@@ -84,7 +85,7 @@ class CurrentLocationListener(private val context: Context, private val callback
         val latitude = location.latitude
         val longitude = location.longitude
 
-        // 將得到的 lastLocation 存在 currentLocation
+        // 將得到的 location 存在 currentLocation
         currentLocation = location
         // 將得到的 address 存在 currentAddress
         currentAddress = geocoder.getFromLocation(latitude, longitude, 1)
@@ -179,7 +180,7 @@ class CurrentLocationListener(private val context: Context, private val callback
     // 1. 一般 last location 定位
     fun getLastLocation() {
         Log.d(TAG, "getLastLocation()")
-        // 使用 requestLocationUpdates 開始更新經緯度
+
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_COARSE_LOCATION
