@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.forecast.ForecastFragment">
+    tools:context=".view.forecast.ForecastFragment">
 
     <data>
         <variable
             name="viewModel"
-            type="com.linglingdr00.weather.ui.forecast.ForecastViewModel" />
+            type="com.linglingdr00.weather.viewmodel.ForecastViewModel" />
     </data>
     
     <androidx.constraintlayout.widget.ConstraintLayout

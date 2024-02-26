@@ -1,4 +1,4 @@
-package com.linglingdr00.weather.ui.location
+package com.linglingdr00.weather.viewmodel
 
 import android.location.Address
 import android.location.Location
@@ -7,9 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.linglingdr00.weather.R
-import com.linglingdr00.weather.data.ForecastItem
-import com.linglingdr00.weather.data.LocationItem
-import com.linglingdr00.weather.data.NowItem
+import com.linglingdr00.weather.model.data.ForecastItem
+import com.linglingdr00.weather.model.data.LocationItem
+import com.linglingdr00.weather.model.data.NowItem
 
 class LocationViewModel : ViewModel() {
 

@@ -1,4 +1,4 @@
-package com.linglingdr00.weather
+package com.linglingdr00.weather.view
 
 import android.view.View
 import android.widget.ImageView
@@ -6,15 +6,16 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.linglingdr00.weather.ui.forecast.ForecastAdapter
-import com.linglingdr00.weather.data.ForecastItem
-import com.linglingdr00.weather.ui.forecast.ForecastViewModel.ForecastWeatherApiStatus
-import com.linglingdr00.weather.ui.location.LocationAdapter
-import com.linglingdr00.weather.data.LocationItem
-import com.linglingdr00.weather.ui.location.LocationViewModel.LocationStatus
-import com.linglingdr00.weather.ui.now.NowAdapter
-import com.linglingdr00.weather.data.NowItem
-import com.linglingdr00.weather.ui.now.NowViewModel.NowWeatherApiStatus
+import com.linglingdr00.weather.R
+import com.linglingdr00.weather.view.forecast.ForecastAdapter
+import com.linglingdr00.weather.model.data.ForecastItem
+import com.linglingdr00.weather.viewmodel.ForecastViewModel.ForecastWeatherApiStatus
+import com.linglingdr00.weather.view.location.LocationAdapter
+import com.linglingdr00.weather.model.data.LocationItem
+import com.linglingdr00.weather.viewmodel.LocationViewModel.LocationStatus
+import com.linglingdr00.weather.view.now.NowAdapter
+import com.linglingdr00.weather.model.data.NowItem
+import com.linglingdr00.weather.viewmodel.NowViewModel.NowWeatherApiStatus
 
 //初始化 ForecastAdapter
 @BindingAdapter("forecastData")

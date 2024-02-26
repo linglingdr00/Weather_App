@@ -1,4 +1,4 @@
-package com.linglingdr00.weather
+package com.linglingdr00.weather.view
 
 import android.Manifest
 import android.content.Intent
@@ -17,10 +17,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.linglingdr00.weather.R
 import com.linglingdr00.weather.databinding.ActivityMainBinding
-import com.linglingdr00.weather.ui.forecast.ForecastViewModel
-import com.linglingdr00.weather.ui.location.LocationViewModel
-import com.linglingdr00.weather.ui.now.NowViewModel
+import com.linglingdr00.weather.viewmodel.ForecastViewModel
+import com.linglingdr00.weather.viewmodel.LocationViewModel
+import com.linglingdr00.weather.viewmodel.NowViewModel
 import kotlinx.coroutines.launch
 
 

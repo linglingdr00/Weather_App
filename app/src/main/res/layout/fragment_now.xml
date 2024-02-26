@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.now.NowFragment">
+    tools:context=".view.now.NowFragment">
 
     <data>
         <variable
             name="viewModel"
-            type="com.linglingdr00.weather.ui.now.NowViewModel" />
+            type="com.linglingdr00.weather.viewmodel.NowViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

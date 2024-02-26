@@ -1,4 +1,4 @@
-package com.linglingdr00.weather.ui.location
+package com.linglingdr00.weather.view.location
 
 import android.location.Address
 import android.location.Location
@@ -16,13 +16,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.linglingdr00.weather.CurrentLocationListener
-import com.linglingdr00.weather.ItemDecoration
+import com.linglingdr00.weather.view.ItemDecoration
 import com.linglingdr00.weather.R
-import com.linglingdr00.weather.data.ForecastItem
-import com.linglingdr00.weather.data.NowItem
 import com.linglingdr00.weather.databinding.FragmentLocationBinding
-import com.linglingdr00.weather.ui.forecast.ForecastViewModel
-import com.linglingdr00.weather.ui.now.NowViewModel
+import com.linglingdr00.weather.model.data.ForecastItem
+import com.linglingdr00.weather.model.data.NowItem
+import com.linglingdr00.weather.viewmodel.ForecastViewModel
+import com.linglingdr00.weather.viewmodel.NowViewModel
+import com.linglingdr00.weather.viewmodel.LocationViewModel
 
 
 class LocationFragment : Fragment() {

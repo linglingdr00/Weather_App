@@ -1,4 +1,4 @@
-package com.linglingdr00.weather.ui.location
+package com.linglingdr00.weather.view.location
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.linglingdr00.weather.R
 import com.linglingdr00.weather.databinding.ListForecastItemBinding
 import com.linglingdr00.weather.databinding.ListNowItemBinding
-import com.linglingdr00.weather.data.ForecastItem
-import com.linglingdr00.weather.data.LocationItem
-import com.linglingdr00.weather.data.NowItem
+import com.linglingdr00.weather.model.data.ForecastItem
+import com.linglingdr00.weather.model.data.LocationItem
+import com.linglingdr00.weather.model.data.NowItem
 
 class LocationAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

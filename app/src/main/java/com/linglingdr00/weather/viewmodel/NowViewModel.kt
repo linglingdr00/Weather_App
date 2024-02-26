@@ -1,13 +1,13 @@
-package com.linglingdr00.weather.ui.now
+package com.linglingdr00.weather.viewmodel
 
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.linglingdr00.weather.data.NowData
-import com.linglingdr00.weather.data.NowItem
-import com.linglingdr00.weather.network.WeatherApi
+import com.linglingdr00.weather.model.data.NowData
+import com.linglingdr00.weather.model.data.NowItem
+import com.linglingdr00.weather.model.network.WeatherApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

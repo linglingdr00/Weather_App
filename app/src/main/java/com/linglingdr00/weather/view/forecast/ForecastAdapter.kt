@@ -1,11 +1,11 @@
-package com.linglingdr00.weather.ui.forecast
+package com.linglingdr00.weather.view.forecast
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.linglingdr00.weather.data.ForecastItem
+import com.linglingdr00.weather.model.data.ForecastItem
 import com.linglingdr00.weather.databinding.ListForecastItemBinding
 
 class ForecastAdapter: ListAdapter<ForecastItem, ForecastAdapter.ForecastViewHolder>(DiffCallback) {

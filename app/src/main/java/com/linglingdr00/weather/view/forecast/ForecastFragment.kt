@@ -1,4 +1,4 @@
-package com.linglingdr00.weather.ui.forecast
+package com.linglingdr00.weather.view.forecast
 
 import android.os.Bundle
 import android.util.Log
@@ -14,9 +14,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewModelScope
-import com.linglingdr00.weather.ItemDecoration
+import com.linglingdr00.weather.view.ItemDecoration
 import com.linglingdr00.weather.R
 import com.linglingdr00.weather.databinding.FragmentForecastBinding
+import com.linglingdr00.weather.viewmodel.ForecastViewModel
 import kotlinx.coroutines.launch
 
 class ForecastFragment : Fragment(), AdapterView.OnItemSelectedListener {

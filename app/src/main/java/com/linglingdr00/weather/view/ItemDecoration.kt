@@ -1,4 +1,4 @@
-package com.linglingdr00.weather
+package com.linglingdr00.weather.view
 
 import android.graphics.Rect
 import android.view.View

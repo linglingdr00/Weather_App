@@ -1,4 +1,4 @@
-package com.linglingdr00.weather.data
+package com.linglingdr00.weather.model.data
 
 import com.squareup.moshi.Json
 
