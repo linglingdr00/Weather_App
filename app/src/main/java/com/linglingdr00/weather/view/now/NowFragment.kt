@@ -70,6 +70,7 @@ class NowFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     //新增 toolbar 的下拉式選單(spinner) menu
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
